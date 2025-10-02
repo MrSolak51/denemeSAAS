@@ -7,14 +7,12 @@ RUN apt-get update && apt-get install -y \
 
 WORKDIR /app
 
-# Crow indir
-RUN git clone https://github.com/CrowCpp/Crow.git /crow
-
 # Projeyi kopyala
 COPY . .
 
 # Build
-RUN cmake -DCROW_MAIN=ON -DCMAKE_BUILD_TYPE=Release /crow && cmake --build /crow
+RUN cmake . && make
+
 
 # Render'ın default portu
 ENV PORT=8080
