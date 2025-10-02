@@ -5,20 +5,19 @@ RUN apt-get update && apt-get install -y \
     g++ cmake git make curl && \
     rm -rf /var/lib/apt/lists/*
 
-# Çalışma dizini
 WORKDIR /app
 
 # Crow indir
-RUN curl -L https://github.com/ipkn/crow/releases/download/v0.3/crow_all.h -o crow_all.h
+RUN git clone https://github.com/CrowCpp/Crow.git /crow
 
 # Projeyi kopyala
 COPY . .
 
 # Build
-RUN cmake . && make
+RUN cmake -DCROW_MAIN=ON -DCMAKE_BUILD_TYPE=Release /crow && cmake --build /crow
 
 # Render'ın default portu
 ENV PORT=8080
 
 # Çalıştır
-CMD ["./hello"]
+CMD ["/crow/crow_examples/example"]
