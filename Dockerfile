@@ -1,30 +1,25 @@
-# 1. Derleme için uygun bir base image kullan
+# 1. Derleme için base image
 FROM ubuntu:22.04 AS build
 
 RUN apt update && apt install -y g++ cmake git libboost-all-dev libasio-dev
 
 WORKDIR /app
 
-# Crow'u çek
+# 2. Crow'u indir
 RUN git clone https://github.com/CrowCpp/Crow.git
+
+# 3. Local projeyi kopyala
 COPY . .
 
-# Crow header'ını include path'e ekle
-RUN cmake -B build -DCROW_INCLUDE_DIR=/app/Crow/include && \
-# asdf
-COPY . .
+# 4. Projeyi derle
+RUN cmake -B build -DCROW_INCLUDE_DIR=/app/Crow/include && cmake --build build --target server
 
-# 2. Projeyi derle
-RUN cmake -B build && cmake --build build --target server
-
-# 3. Runtime stage (küçük boyutlu)
+# 5. Runtime stage
 FROM ubuntu:22.04
-
 RUN apt update && apt install -y libboost-all-dev libasio-dev
 WORKDIR /app
 
 COPY --from=build /app/build/server /app/server
 
-# Render 8080 portunu dinler
 ENV PORT 8080
 CMD ["./server"]
