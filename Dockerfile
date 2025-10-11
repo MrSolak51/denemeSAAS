@@ -11,7 +11,7 @@ COPY . .
 
 # Crow header'ını include path'e ekle
 RUN cmake -B build -DCROW_INCLUDE_DIR=/app/Crow/include && \
-
+# asdf
 COPY . .
 
 # 2. Projeyi derle
