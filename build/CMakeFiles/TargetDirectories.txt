@@ -1,0 +1,3 @@
+/home/mrsolak/Desktop/denemeSAAS/build/CMakeFiles/hello_render.dir
+/home/mrsolak/Desktop/denemeSAAS/build/CMakeFiles/edit_cache.dir
+/home/mrsolak/Desktop/denemeSAAS/build/CMakeFiles/rebuild_cache.dir

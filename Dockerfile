@@ -1,21 +1,22 @@
-FROM debian:bullseye
+# 1. Derleme için uygun bir base image kullan
+FROM ubuntu:22.04 AS build
 
-# Gerekli paketler
-RUN apt-get update && apt-get install -y \
-    g++ cmake git make curl && \
-    rm -rf /var/lib/apt/lists/*
+RUN apt update && apt install -y g++ cmake git libboost-all-dev libasio-dev
 
 WORKDIR /app
-
-# Projeyi kopyala
 COPY . .
 
-# Build
-RUN cmake . && make
+# 2. Projeyi derle
+RUN cmake -B build && cmake --build build --target server
 
+# 3. Runtime stage (küçük boyutlu)
+FROM ubuntu:22.04
 
-# Render'ın default portu
-ENV PORT=8080
+RUN apt update && apt install -y libboost-all-dev libasio-dev
+WORKDIR /app
 
-# Çalıştır
-CMD ["/crow/crow_examples/example"]
+COPY --from=build /app/build/server /app/server
+
+# Render 8080 portunu dinler
+ENV PORT 8080
+CMD ["./server"]
