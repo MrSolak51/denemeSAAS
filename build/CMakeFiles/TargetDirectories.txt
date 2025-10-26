@@ -1,3 +1,0 @@
-/home/mrsolak/Desktop/denemeSAAS/build/CMakeFiles/server.dir
-/home/mrsolak/Desktop/denemeSAAS/build/CMakeFiles/edit_cache.dir
-/home/mrsolak/Desktop/denemeSAAS/build/CMakeFiles/rebuild_cache.dir
