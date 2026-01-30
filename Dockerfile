@@ -19,7 +19,12 @@ FROM ubuntu:22.04
 RUN apt update && apt install -y libboost-all-dev libasio-dev
 WORKDIR /app
 
+# Derlenmiş uygulamayı kopyala
 COPY --from=build /app/build/server /app/server
+
+# EKSİK OLAN KLASÖRLERİ BURADA EKLEYELİM:
+COPY templates ./templates
+COPY db ./db
 
 ENV PORT 8080
 CMD ["./server"]
