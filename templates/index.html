@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Özgeçmiş | {{isim}} {{soyisim}}</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f9;
+            color: #333;
+        }
+        .container {
+            max-width: 800px;
+            margin: 30px auto;
+            background: #fff;
+            padding: 40px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+            border-radius: 8px;
+        }
+        header {
+            text-align: center;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 20px;
+            margin-bottom: 20px;
+        }
+        header h1 {
+            margin: 0;
+            color: #2c3e50;
+            text-transform: uppercase;
+        }
+        .contact-info {
+            font-size: 0.9em;
+            color: #7f8c8d;
+        }
+        h2 {
+            color: #2980b9;
+            border-left: 5px solid #2980b9;
+            padding-left: 10px;
+            margin-top: 30px;
+        }
+        .job, .edu {
+            margin-bottom: 15px;
+        }
+        .job-title {
+            font-weight: bold;
+            color: #2c3e50;
+        }
+        .date {
+            float: right;
+            color: #95a5a6;
+            font-style: italic;
+        }
+        .skills {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            list-style: none;
+            padding: 0;
+        }
+        .skills li {
+            background: #3498db;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.9em;
+        }
+        .skills .Uzman {
+            background: #8c0e0e;
+        }
+        .skills .İyi {
+            background: #FFA500;
+        }
+        .skills .Orta {
+            background: #FFFF00;
+            color:black;
+        }
+        .skills .Başlangıç {
+            background: #0000FF;
+        }
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            font-size: 0.8em;
+            color: #bdc3c7;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1>{{isim}} {{soyisim}}</h1>
+        <div class="contact-info">
+            📍 <a href="https://www.google.com/maps/dir/?api=1&destination={{address}}" target="_blank">{{address}}</a> | 📧
+            <a href="mailto:{{mail}}">{{mail}}</a> | 📱 <a href="tel:{{tel}}">{{tel}}</a>
+        </div>
+        <p>Bilgisayar Mühendisi</p>
+    </header>
+
+    <section>
+        <h2>Hakkımda</h2>
+        <p>{{about_me}}</p>
+    </section>
+
+    <section>
+        <h2>Deneyim</h2>
+        {{#experiences}}
+        <div class="job">
+            <span class="date">{{tarih}}</span>
+            <div class="job-title">{{pozisyon}} - {{sirket}}</div>
+            <p>{{detay}}</p>
+        </div>
+        {{/experiences}}
+    </section>
+
+    <section>
+        <h2>Eğitim Bilgileri</h2>
+        <ul>
+            {{#educations}}
+            <li>
+                <strong>{{okul_adi}}</strong> - {{bolum}}
+                <span style="float:right;">{{tarih}}</span>
+            </li>
+            {{/educations}}
+        </ul>
+    </section>
+    <section>
+        <h2>Yetenekler</h2>
+        <ul class="skills">
+            {{#skills}}
+            <li class="{{skill_level}}">
+                <strong>{{skill_level}}</strong> - {{skill_name}}
+            </li>
+            {{/skills}}
+        </ul>
+    </section>
+
+    <footer>
+        &copy; 2026 <a href="/">{{isim}} {{soyisim}}</a> - Tüm Hakları Saklıdır.
+    </footer>
+</div>
+
+</body>
+</html>
