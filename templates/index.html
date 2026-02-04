@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="tr">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Özgeçmiş | {{isim}} {{soyisim}}</title>
+    <title>Resume | {{name}} {{surname}}</title>
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -13,6 +13,51 @@
             background-color: #f4f4f9;
             color: #333;
         }
+
+        /* Navigation Style (Aligned with the contact page) */
+        nav {
+            background: #fff;
+            padding: 10px 0;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        nav ul {
+            list-style: none;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin: 0;
+            padding: 0;
+        }
+        #nav-toggle {
+            background: #fff;
+            padding: 15px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            position: absolute; /* Absolute positioning is more appropriate than fixed */
+            display: none;
+            border-radius: 0 0 1rem 1rem;
+            list-style: none;
+            min-width: 150px;
+        }
+        #nav-toggle li {
+            margin: 10px 0;
+        }
+        nav span {
+            color: #2980b9;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        nav a {
+            text-decoration: none;
+            color: #2980b9;
+            font-weight: bold;
+        }
+        nav a:hover {
+            color: #3498db;
+        }
+
         .container {
             max-width: 800px;
             margin: 30px auto;
@@ -31,10 +76,6 @@
             margin: 0;
             color: #2c3e50;
             text-transform: uppercase;
-        }
-        .contact-info {
-            font-size: 0.9em;
-            color: #7f8c8d;
         }
         h2 {
             color: #2980b9;
@@ -68,19 +109,11 @@
             border-radius: 20px;
             font-size: 0.9em;
         }
-        .skills .Uzman {
-            background: #8c0e0e;
-        }
-        .skills .İyi {
-            background: #FFA500;
-        }
-        .skills .Orta {
-            background: #FFFF00;
-            color:black;
-        }
-        .skills .Başlangıç {
-            background: #0000FF;
-        }
+        .skills .Expert { background: #8c0e0e; }
+        .skills .Good { background: #FFA500; }
+        .skills .Intermediate { background: #FFFF00; color:black; }
+        .skills .Beginner { background: #0000FF; }
+
         footer {
             text-align: center;
             margin-top: 40px;
@@ -91,45 +124,55 @@
 </head>
 <body>
 
+<nav>
+    <ul>
+        <li><a href="/">Home</a></li>
+        <li id="nav-toggle-container">
+            <span>Services</span>
+            <ul id="nav-toggle">
+                <li><a href="/image_converter">Image Converter</a></li>
+            </ul>
+        </li>
+        <li><a href="/contact_me">Contact</a></li>
+    </ul>
+</nav>
+
 <div class="container">
     <header>
-        <h1>{{isim}} {{soyisim}}</h1>
-        <div class="contact-info">
-            📍 <a href="https://www.google.com/maps/dir/?api=1&destination={{address}}" target="_blank">{{address}}</a> | 📧
-            <a href="mailto:{{mail}}">{{mail}}</a> | 📱 <a href="tel:{{tel}}">{{tel}}</a>
-        </div>
-        <p>Bilgisayar Mühendisi</p>
+        <h1>{{name}} {{surname}}</h1>
+        <p>Computer Engineer</p>
     </header>
 
     <section>
-        <h2>Hakkımda</h2>
+        <h2>About Me</h2>
         <p>{{about_me}}</p>
     </section>
 
     <section>
-        <h2>Deneyim</h2>
+        <h2>Experience</h2>
         {{#experiences}}
         <div class="job">
-            <span class="date">{{tarih}}</span>
-            <div class="job-title">{{pozisyon}} - {{sirket}}</div>
+            <span class="date">{{date}}</span>
+            <div class="job-title">{{position}} - {{company}}</div>
             <p>{{detay}}</p>
         </div>
         {{/experiences}}
     </section>
 
     <section>
-        <h2>Eğitim Bilgileri</h2>
+        <h2>Education</h2>
         <ul>
             {{#educations}}
             <li>
-                <strong>{{okul_adi}}</strong> - {{bolum}}
-                <span style="float:right;">{{tarih}}</span>
+                <strong>{{school_name}}</strong> - {{department}}
+                <span style="float:right;">{{date}}</span>
             </li>
             {{/educations}}
         </ul>
     </section>
+
     <section>
-        <h2>Yetenekler</h2>
+        <h2>Skills</h2>
         <ul class="skills">
             {{#skills}}
             <li class="{{skill_level}}">
@@ -140,9 +183,24 @@
     </section>
 
     <footer>
-        &copy; 2026 <a href="/">{{isim}} {{soyisim}}</a> - Tüm Hakları Saklıdır.
+        © 2026 <a href="/">{{name}} {{surname}}</a> - All Rights Reserved.
     </footer>
 </div>
+
+<script>
+    // Same logic as the contact page
+    var container = document.getElementById("nav-toggle-container");
+    var menu = document.getElementById("nav-toggle");
+
+    // Show on mouse over, hide on mouse out
+    container.addEventListener("mouseover", function() {
+        menu.style.display = "block";
+    });
+
+    container.addEventListener("mouseout", function() {
+        menu.style.display = "none";
+    });
+</script>
 
 </body>
 </html>

@@ -17,6 +17,8 @@ RUN cmake -B build -DCROW_INCLUDE_DIR=/app/Crow/include && cmake --build build -
 # 5. Runtime stage
 FROM ubuntu:22.04
 RUN apt update && apt install -y libboost-all-dev libasio-dev
+RUN mkdir -p /app/in_files
+RUN mkdir -p /app/out_files
 WORKDIR /app
 
 COPY --from=build /app/build/server /app/server
