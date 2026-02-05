@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact | {{name}} {{surname}}</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f9;
+            color: #333;
+        }
+        /* Menu Style */
+        nav {
+            background: #fff;
+            padding: 10px 0;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+        nav ul {
+            list-style: none;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin: 0;
+            padding: 0;
+        }
+        #nav-toggle {
+            background: #fff;
+            padding: 10px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            position: fixed;
+            display: none;
+            border-radius: 0rem 0rem 1rem 1rem;
+        }
+        nav span{
+            color: #2980b9;
+            font-weight: bold;
+        }
+        nav a {
+            text-decoration: none;
+            color: #2980b9;
+            font-weight: bold;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 30px auto;
+            background: #fff;
+            padding: 40px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+            border-radius: 8px;
+        }
+        header {
+            text-align: center;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 20px;
+            margin-bottom: 20px;
+        }
+        header h1 {
+            margin: 0;
+            color: #2c3e50;
+            text-transform: uppercase;
+        }
+        h2 {
+            color: #2980b9;
+            border-left: 5px solid #2980b9;
+            padding-left: 10px;
+            margin-bottom: 20px;
+        }
+
+        /* Contact Information Cards */
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+        .info-item {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            border: 1px solid #eef0f1;
+        }
+        .info-item strong {
+            display: block;
+            color: #2c3e50;
+            margin-bottom: 5px;
+        }
+        .info-item a {
+            color: #3498db;
+            text-decoration: none;
+            word-break: break-all;
+        }
+
+        /* Form Design */
+        .contact-form {
+            background: #fff;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+        input, textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box; /* Prevents padding from breaking width */
+            font-size: 1em;
+            font-family: inherit;
+        }
+        input:focus, textarea:focus {
+            border-color: #3498db;
+            outline: none;
+            box-shadow: 0 0 5px rgba(52, 152, 219, 0.2);
+        }
+        button {
+            background: #3498db;
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1.1em;
+            font-weight: bold;
+            transition: background 0.3s;
+        }
+        button:hover {
+            background: #2980b9;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            font-size: 0.8em;
+            color: #bdc3c7;
+        }
+    </style>
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8834418381944115"
+            crossorigin="anonymous"></script>
+</head>
+<body>
+
+<nav>
+    <div class="nav-container">
+        <ul>
+            <li><a href="/">Home</a></li>
+            <li id="nav-toggle-container">
+                <span>Services</span>
+                <ul id="nav-toggle">
+                    <li><a href="/image_converter">Image Converter</a></li>
+                </ul>
+            </li>
+            <li><a href="/contact_me">Contact</a></li>
+            <li><a href="/privacy_policy">Privacy Policy</a></li>
+            <li><a href="/terms_of_service">Terms of Service</a></li>
+        </ul>
+    </div>
+</nav>
+
+
+<div class="container">
+    <header>
+        <h1>Terms of Service</h1>
+        <p>Please read these Terms of Service carefully before using {{name}} {{surname}}'s image conversion service.</p>
+    </header>
+
+    <section>
+        <h2>1. Acceptance of Terms</h2>
+        <p>By accessing or using our image conversion service (the "Service"), you agree to be bound by these Terms of Service. If you disagree with any part of these terms, you may not access the Service.</p>
+    </section>
+
+    <section>
+        <h2>2. Description of Service</h2>
+        <p>Our Service provides free online image conversion tools that allow users to:</p>
+        <ul>
+            <li>Upload image files in various supported formats</li>
+            <li>Convert images between different formats (JPG, PNG, WebP, BMP, TIFF)</li>
+            <li>Download converted images</li>
+            <li>Manage uploaded files temporarily</li>
+        </ul>
+    </section>
+
+    <section>
+        <h2>3. User Responsibilities</h2>
+        <p>By using our Service, you agree to:</p>
+        <ul>
+            <li>Use the Service only for lawful purposes</li>
+            <li>Not upload any content that infringes on intellectual property rights</li>
+            <li>Not upload malicious software, viruses, or harmful code</li>
+            <li>Not use the Service for automated bulk conversions without permission</li>
+            <li>Not attempt to reverse engineer, hack, or interfere with the Service</li>
+            <li>Not use the Service to violate any applicable laws or regulations</li>
+        </ul>
+
+        <div class="warning-box">
+            <strong>Important:</strong> Violation of these responsibilities may result in immediate termination of your access to the Service.
+        </div>
+    </section>
+
+    <section>
+        <h2>4. Uploaded Content</h2>
+
+        <h3>4.1 Ownership</h3>
+        <p>You retain all rights to the images you upload. We do not claim ownership of any content you submit to our Service.</p>
+
+        <h3>4.2 Storage and Deletion</h3>
+        <div class="highlight">
+            <p><strong>Automatic Deletion Policy:</strong></p>
+            <ul>
+                <li>Uploaded images are temporarily stored solely for conversion purposes</li>
+                <li>All files (original and converted) are automatically deleted within <strong>24 hours</strong></li>
+                <li>We do not guarantee permanent storage of any files</li>
+                <li>You are solely responsible for downloading your converted images promptly</li>
+            </ul>
+        </div>
+
+        <h3>4.3 Prohibited Content</h3>
+        <p>You may not upload images that:</p>
+        <table>
+            <thead>
+            <tr>
+                <th>Category</th>
+                <th>Examples</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>Illegal Content</td>
+                <td>Images promoting illegal activities, copyrighted material without permission</td>
+            </tr>
+            <tr>
+                <td>Adult Material</td>
+                <td>Nudity, pornography, sexually explicit material</td>
+            </tr>
+            <tr>
+                <td>Harmful Content</td>
+                <td>Promotion of violence, hate speech, discrimination, harassment</td>
+            </tr>
+            <tr>
+                <td>Malicious Files</td>
+                <td>Viruses, malware, scripts designed to harm systems</td>
+            </tr>
+            <tr>
+                <td>Personal Information</td>
+                <td>Others' personal information without consent, identification documents</td>
+            </tr>
+            </tbody>
+        </table>
+    </section>
+
+    <section>
+        <h2>5. Limitations of Service</h2>
+
+        <h3>5.1 Technical Limitations</h3>
+        <ul>
+            <li><strong>Maximum file size:</strong> 50 MB per image (subject to change)</li>
+            <li><strong>Supported formats:</strong> JPG, JPEG, PNG, GIF, BMP, WebP, TIFF</li>
+            <li><strong>Daily conversion limit:</strong> Reasonable personal use (we reserve the right to limit excessive usage)</li>
+            <li><strong>Availability:</strong> Service may be temporarily unavailable for maintenance</li>
+        </ul>
+
+        <h3>5.2 No Warranty</h3>
+        <p>The Service is provided "as is" and "as available" without warranties of any kind, either express or implied. We do not guarantee that:</p>
+        <ul>
+            <li>The Service will be uninterrupted or error-free</li>
+            <li>Conversions will meet specific quality requirements</li>
+            <li>The Service will be available at all times</li>
+            <li>Results will be free from data loss or corruption</li>
+        </ul>
+    </section>
+
+    <section>
+        <h2>6. Intellectual Property</h2>
+        <p>The Service and its original content, features, and functionality are owned by {{name}} {{surname}} and are protected by international copyright, trademark, patent, trade secret, and other intellectual property laws.</p>
+    </section>
+
+    <section>
+        <h2>7. Limitation of Liability</h2>
+        <p>To the maximum extent permitted by law, {{name}} {{surname}} shall not be liable for any indirect, incidental, special, consequential, or punitive damages, including without limitation, loss of profits, data, use, goodwill, or other intangible losses, resulting from:</p>
+        <ul>
+            <li>Your access to or use of or inability to access or use the Service</li>
+            <li>Any conduct or content of any third party on the Service</li>
+            <li>Any content obtained from the Service</li>
+            <li>Unauthorized access, use, or alteration of your transmissions or content</li>
+        </ul>
+    </section>
+
+    <section>
+        <h2>8. Changes to Terms</h2>
+        <p>We reserve the right to modify or replace these Terms at any time. If a revision is material, we will provide at least 30 days' notice prior to any new terms taking effect. What constitutes a material change will be determined at our sole discretion.</p>
+        <p>By continuing to access or use our Service after any revisions become effective, you agree to be bound by the revised terms.</p>
+    </section>
+
+    <section>
+        <h2>9. Termination</h2>
+        <p>We may terminate or suspend your access to the Service immediately, without prior notice or liability, for any reason whatsoever, including without limitation if you breach the Terms.</p>
+    </section>
+
+    <section>
+        <h2>10. Governing Law</h2>
+        <p>These Terms shall be governed and construed in accordance with the laws of [Your Country/State], without regard to its conflict of law provisions.</p>
+    </section>
+
+    <section>
+        <h2>11. Contact Information</h2>
+        <p>If you have any questions about these Terms, please contact us:</p>
+        <ul>
+            <li><strong>Website:</strong> <a href="/contact_me">Contact Form</a></li>
+            <li><strong>Effective Date:</strong> {{current_date}}</li>
+        </ul>
+    </section>
+
+
+
+    <footer>
+        <div class="footer-links">
+            <a href="/">Home</a>
+            <a href="/image_converter">Image Converter</a>
+            <a href="/contact_me">Contact Us</a>
+            <a href="/privacy_policy">Privacy Policy</a>
+            <a href="/terms_of_service">Terms of Service</a>
+        </div>
+        <p class="copyright">© 2024 {{name}} {{surname}}. All Rights Reserved.</p>
+        <p class="copyright">This free image conversion tool is provided for personal and commercial use. All converted images are automatically deleted within 24 hours for your privacy.</p>
+    </footer>
+</div>
+
+
+<script>
+    var a = document.getElementById("nav-toggle-container");
+    var x = document.getElementById("nav-toggle");
+
+    a.addEventListener("mouseout", hideNav);
+    a.addEventListener("mouseover", showNav);
+
+    function hideNav() {
+        x.style.display = "none";
+    }
+    function showNav() {
+        x.style.display = "block";
+    }
+</script>
+</body>
+</html>

@@ -151,22 +151,25 @@
 <body>
 
 <nav>
-    <ul>
-        <li><a href="/">Home</a></li>
-        <li id="nav-toggle-container">
-            <span>Services</span>
-            <ul id="nav-toggle">
-                <li><a href="/image_converter">Image Converter</a></li>
-            </ul>
-        </li>
-        <li><a href="/contact_me">Contact</a></li>
-    </ul>
+    <div class="nav-container">
+        <ul>
+            <li><a href="/">Home</a></li>
+            <li id="nav-toggle-container">
+                <span>Services</span>
+                <ul id="nav-toggle">
+                    <li><a href="/image_converter">Image Converter</a></li>
+                </ul>
+            </li>
+            <li><a href="/contact_me">Contact</a></li>
+            <li><a href="/privacy_policy">Privacy Policy</a></li>
+            <li><a href="/terms_of_service">Terms of Service</a></li>
+        </ul>
+    </div>
 </nav>
 
 <div class="container">
     <section class="privacy-policy">
         <h1>Privacy Policy</h1>
-        <p>Last updated: February 05, 2026</p>
         <p>This Privacy Policy describes Our policies and procedures on the collection, use and disclosure of Your information when You use the Service and tells You about Your privacy rights and how the law protects You.</p>
         <p>We use Your Personal Data to provide and improve the Service. By using the Service, You agree to the collection and use of information in accordance with this Privacy Policy. This Privacy Policy has been created with the help of the <a href="https://www.freeprivacypolicy.com/free-privacy-policy-generator/" target="_blank">Privacy Policy Generator</a>.</p>
         <h2>Interpretation and Definitions</h2>
@@ -387,8 +390,18 @@
     </section>
 
 
+
+
     <footer>
-        © 2026 {{name}} {{surname}} - All Rights Reserved. <a href="/privacy_policy/">privacy and policy</a>
+        <div class="footer-links">
+            <a href="/">Home</a>
+            <a href="/image_converter">Image Converter</a>
+            <a href="/contact_me">Contact Us</a>
+            <a href="/privacy_policy">Privacy Policy</a>
+            <a href="/terms_of_service">Terms of Service</a>
+        </div>
+        <p class="copyright">© 2024 {{name}} {{surname}}. All Rights Reserved.</p>
+        <p class="copyright">This free image conversion tool is provided for personal and commercial use. All converted images are automatically deleted within 24 hours for your privacy.</p>
     </footer>
 </div>
 

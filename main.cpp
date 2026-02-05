@@ -128,12 +128,19 @@ int main() {
     });
 
 
-    CROW_ROUTE(app, "/privacy_policy")
+    CROW_ROUTE(app, "/privacy_policy/")
        ([]() {
            crow::mustache::context ctx;
            ctx["name"] = "Metehan";
            ctx["surname"] = "TURGUT";
            return crow::mustache::load("privacy_policy.html").render(ctx);
+    });
+    CROW_ROUTE(app, "/terms_of_service/")
+       ([]() {
+           crow::mustache::context ctx;
+           ctx["name"] = "Metehan";
+           ctx["surname"] = "TURGUT";
+           return crow::mustache::load("terms_of_service.html").render(ctx);
        });
     // 1. HOME PAGE
     CROW_ROUTE(app, "/")
@@ -220,7 +227,7 @@ int main() {
                 }
             }
         }
-        ctx["uploaded_files"] = std::move(file_list);
+        ctx["uploaded_images"] = std::move(file_list);
 
         auto rendered = crow::mustache::load("image_converter.html").render(ctx);
         crow::response res(rendered.body_);
@@ -233,7 +240,7 @@ int main() {
     });
 
     // 4. FILE UPLOAD AND CONVERT (POST)
-    CROW_ROUTE(app, "/file_converter/upload/").methods(crow::HTTPMethod::Post)
+    CROW_ROUTE(app, "/image_converter/upload/").methods(crow::HTTPMethod::Post)
     ([&](const crow::request& req) {
         CROW_LOG_INFO << "Upload request started.";
 
@@ -309,7 +316,7 @@ int main() {
     });
 
     // Redirect if upload route is accessed via GET
-    CROW_ROUTE(app, "/file_converter/upload/")
+    CROW_ROUTE(app, "/image_converter/upload/")
     ([]() {
         crow::response res;
         res.redirect("/image_converter/");

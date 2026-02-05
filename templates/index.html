@@ -127,16 +127,20 @@
 <body>
 
 <nav>
-    <ul>
-        <li><a href="/">Home</a></li>
-        <li id="nav-toggle-container">
-            <span>Services</span>
-            <ul id="nav-toggle">
-                <li><a href="/image_converter">Image Converter</a></li>
-            </ul>
-        </li>
-        <li><a href="/contact_me">Contact</a></li>
-    </ul>
+    <div class="nav-container">
+        <ul>
+            <li><a href="/">Home</a></li>
+            <li id="nav-toggle-container">
+                <span>Services</span>
+                <ul id="nav-toggle">
+                    <li><a href="/image_converter">Image Converter</a></li>
+                </ul>
+            </li>
+            <li><a href="/contact_me">Contact</a></li>
+            <li><a href="/privacy_policy">Privacy Policy</a></li>
+            <li><a href="/terms_of_service">Terms of Service</a></li>
+        </ul>
+    </div>
 </nav>
 
 <div class="container">
@@ -184,8 +188,17 @@
         </ul>
     </section>
 
+
     <footer>
-        © 2026 {{name}} {{surname}} - All Rights Reserved. <a href="/privacy_policy/">privacy and policy</a>
+        <div class="footer-links">
+            <a href="/">Home</a>
+            <a href="/image_converter">Image Converter</a>
+            <a href="/contact_me">Contact Us</a>
+            <a href="/privacy_policy">Privacy Policy</a>
+            <a href="/terms_of_service">Terms of Service</a>
+        </div>
+        <p class="copyright">© 2024 {{name}} {{surname}}. All Rights Reserved.</p>
+        <p class="copyright">This free image conversion tool is provided for personal and commercial use. All converted images are automatically deleted within 24 hours for your privacy.</p>
     </footer>
 </div>
 

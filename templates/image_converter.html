@@ -3,8 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Image Converter | {{name}} {{surname}}</title>
+    <title>Free Image Converter | Convert JPG, PNG, WebP, BMP, TIFF | {{name}} {{surname}}</title>
+
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="Free online image converter tool. Convert between JPG, PNG, WebP, BMP, TIFF formats instantly. No registration required, secure processing, automatic file deletion.">
+    <meta name="keywords" content="image converter, convert image, JPG to PNG, PNG to JPG, WebP converter, free image tool, online image conversion, BMP converter, TIFF converter">
+    <meta name="author" content="{{name}} {{surname}}">
+    <meta name="robots" content="index, follow">
+
     <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             line-height: 1.6;
@@ -14,332 +27,822 @@
             color: #333;
         }
 
-        /* Navigation Style – Fully consistent with other pages */
+        /* Navigation Style */
         nav {
             background: #fff;
-            padding: 10px 0;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            padding: 15px 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
             position: sticky;
             top: 0;
             z-index: 1000;
         }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
         nav ul {
             list-style: none;
             display: flex;
             justify-content: center;
-            gap: 20px;
+            gap: 30px;
             margin: 0;
             padding: 0;
         }
+
         #nav-toggle {
             background: #fff;
             padding: 15px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
             position: absolute;
             display: none;
-            border-radius: 0 0 1rem 1rem;
+            border-radius: 0 0 8px 8px;
             list-style: none;
-            min-width: 150px;
+            min-width: 180px;
+            z-index: 1001;
         }
+
         #nav-toggle li {
-            margin: 10px 0;
+            margin: 12px 0;
         }
+
         nav span {
             color: #2980b9;
-            font-weight: bold;
+            font-weight: 600;
             cursor: pointer;
+            padding: 5px 10px;
+            border-radius: 4px;
+            transition: background 0.3s;
         }
+
+        nav span:hover {
+            background: #f0f8ff;
+        }
+
         nav a {
             text-decoration: none;
             color: #2980b9;
-            font-weight: bold;
-        }
-        nav a:hover {
-            color: #3498db;
-        }
-
-        .container {
-            max-width: 800px;
-            margin: 30px auto;
-            background: #fff;
-            padding: 40px;
-            box-shadow: 0 0 20px rgba(0,0,0,0.1);
-            border-radius: 8px;
-        }
-        header {
-            text-align: center;
-            border-bottom: 2px solid #3498db;
-            padding-bottom: 20px;
-            margin-bottom: 30px;
-        }
-        header h1 {
-            margin: 0;
-            color: #2c3e50;
-            text-transform: uppercase;
-        }
-        h2 {
-            color: #2c3e50;
-            font-size: 1.2em;
-            margin-bottom: 15px;
-        }
-
-        /* Image Upload Area */
-        .upload-section {
-            background: #f8f9fa;
-            padding: 30px;
-            border: 2px dashed #3498db;
-            border-radius: 8px;
-            text-align: center;
-            margin-bottom: 40px;
-        }
-        .upload-section input[type="image"] {
-            margin-bottom: 15px;
-        }
-        .btn-upload {
-            background: #3498db;
-            color: white;
-            padding: 12px 25px;
-            border: none;
-            border-radius: 4px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: background 0.3s;
-        }
-        .btn-upload:hover {
-            background: #2980b9;
-        }
-
-        /* Image List Table */
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 10px;
-        }
-        th {
-            text-align: left;
-            background: #f4f4f9;
-            padding: 12px;
-            border-bottom: 2px solid #ddd;
-        }
-        td {
-            padding: 12px;
-            border-bottom: 1px solid #eee;
-        }
-        .actions {
-            display: flex;
-            gap: 10px;
-        }
-        .btn-action {
-            text-decoration: none;
-            font-size: 0.85em;
+            font-weight: 600;
             padding: 5px 10px;
             border-radius: 4px;
-            font-weight: bold;
-        }
-        .btn-download {
-            background: #2ecc71;
-            color: white;
-        }
-        .btn-delete {
-            background: #e74c3c;
-            color: white;
-        }
-        .btn-action:hover {
-            opacity: 0.8;
+            transition: all 0.3s;
         }
 
-        footer {
-            text-align: center;
-            margin-top: 40px;
-            font-size: 0.8em;
-            color: #bdc3c7;
+        nav a:hover {
+            color: #3498db;
+            background: #f0f8ff;
         }
 
-
-        /* Ana Layout Düzeni */
+        /* Main Layout */
         .main-layout {
             display: flex;
             justify-content: center;
             align-items: flex-start;
             gap: 20px;
-            padding: 20px;
-            max-width: 1400px; /* Kenarlar dahil toplam genişlik */
+            padding: 30px 20px;
+            max-width: 1400px;
             margin: 0 auto;
         }
 
-        /* Yan Reklam Panelleri */
-        .ad-sidebar {
-            width: 160px;
-            position: sticky;
-            top: 80px; /* Navigasyonun altında sabit kalması için */
+        /* Container */
+        .container {
+            flex-grow: 1;
+            max-width: 900px;
+            background: #fff;
+            padding: 50px;
+            box-shadow: 0 5px 25px rgba(0,0,0,0.08);
+            border-radius: 12px;
+            margin: 0 auto;
+        }
+
+        /* Header */
+        header {
+            text-align: center;
+            border-bottom: 3px solid #3498db;
+            padding-bottom: 25px;
+            margin-bottom: 40px;
+        }
+
+        header h1 {
+            margin: 0 0 15px 0;
+            color: #2c3e50;
+            font-size: 2.5em;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        header p {
+            color: #7f8c8d;
+            font-size: 1.1em;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Upload Section */
+        .upload-section {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9f7fe 100%);
+            padding: 40px;
+            border: 3px dashed #3498db;
+            border-radius: 12px;
+            text-align: center;
+            margin-bottom: 50px;
+            transition: all 0.3s;
+        }
+
+        .upload-section:hover {
+            border-color: #2980b9;
+            box-shadow: 0 5px 20px rgba(52, 152, 219, 0.15);
+        }
+
+        .upload-section h2 {
+            color: #2c3e50;
+            margin-bottom: 30px;
+            font-size: 1.8em;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+            text-align: left;
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: 600;
+            color: #2c3e50;
+            font-size: 1.1em;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 14px;
+            background: white;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-family: inherit;
+            font-size: 1em;
+            transition: border 0.3s;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: #3498db;
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+        }
+
+        .form-select {
+            width: 100%;
+            padding: 14px;
+            border-radius: 8px;
+            border: 2px solid #3498db;
+            background: white;
+            font-family: inherit;
+            font-size: 1em;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .form-select:focus {
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+        }
+
+        .btn-upload {
+            background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+            color: white;
+            padding: 16px 40px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 1.1em;
+            cursor: pointer;
+            transition: all 0.3s;
+            width: 500px;
+            max-width: 100%;
+            letter-spacing: 0.5px;
+        }
+
+        .btn-upload:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 7px 15px rgba(52, 152, 219, 0.3);
+        }
+
+        .btn-upload:active {
+            transform: translateY(0);
+        }
+
+        /* Horizontal Ad */
+        .ad-horizontal {
+            width: 100%;
+            margin: 40px 0;
+            min-height: 100px;
+            background: #fff;
+            border: 1px solid #e0e0e0;
+            padding: 10px;
+            box-sizing: border-box;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        /* Image List */
+        .image-list {
+            margin-top: 40px;
+        }
+
+        .image-list h2 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+            font-size: 1.8em;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #ecf0f1;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        th {
+            text-align: left;
+            background: #f4f4f9;
+            padding: 18px 15px;
+            border-bottom: 2px solid #ddd;
+            color: #2c3e50;
+            font-weight: 600;
+        }
+
+        td {
+            padding: 18px 15px;
+            border-bottom: 1px solid #eee;
+            color: #555;
+        }
+
+        tr:hover {
+            background-color: #f9f9f9;
+        }
+
+        .actions {
             display: flex;
-            flex-direction: column;
+            gap: 12px;
+        }
+
+        .btn-action {
+            text-decoration: none;
+            font-size: 0.9em;
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .btn-download {
+            background: #2ecc71;
+            color: white;
+        }
+
+        .btn-download:hover {
+            background: #27ae60;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(46, 204, 113, 0.3);
+        }
+
+        .btn-delete {
+            background: #e74c3c;
+            color: white;
+        }
+
+        .btn-delete:hover {
+            background: #c0392b;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(231, 76, 60, 0.3);
+        }
+
+        /* Content Sections */
+        .content-section, .technical-details {
+            margin-top: 50px;
+            padding-top: 40px;
+            border-top: 1px solid #ecf0f1;
+        }
+
+        .content-section h2, .technical-details h2 {
+            color: #2c3e50;
+            font-size: 1.8em;
+            margin-bottom: 25px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #3498db;
+        }
+
+        .content-section h3, .technical-details h3 {
+            color: #2980b9;
+            margin: 25px 0 15px 0;
+            font-size: 1.4em;
+        }
+
+        .content-section h4, .technical-details h4 {
+            color: #34495e;
+            margin: 20px 0 10px 0;
+            font-size: 1.2em;
+        }
+
+        .content-section p, .technical-details p {
+            margin-bottom: 15px;
+            color: #555;
+            line-height: 1.7;
+        }
+
+        .content-section ul, .content-section ol, .technical-details ul, .technical-details ol {
+            margin: 15px 0 25px 30px;
+            color: #555;
+        }
+
+        .content-section li, .technical-details li {
+            margin-bottom: 10px;
+            line-height: 1.6;
+        }
+
+        .content-section strong, .technical-details strong {
+            color: #2c3e50;
+        }
+
+        /* Format Comparison Table */
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 25px 0;
+            background: white;
+            box-shadow: 0 3px 15px rgba(0,0,0,0.05);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .comparison-table th {
+            background: #3498db;
+            color: white;
+            text-align: center;
+            padding: 16px;
+            border: none;
+        }
+
+        .comparison-table td {
+            padding: 16px;
+            text-align: center;
+            border: 1px solid #eee;
+        }
+
+        .comparison-table tr:nth-child(even) {
+            background: #f9f9f9;
+        }
+
+        .comparison-table tr:hover {
+            background: #f0f7ff;
+        }
+
+        /* Use Cases Box */
+        .use-cases-box {
+            background: linear-gradient(135deg, #f8f9fa 0%, #f0f7ff 100%);
+            padding: 30px;
+            border-radius: 12px;
+            margin: 25px 0;
+            border-left: 5px solid #3498db;
+        }
+
+        /* FAQ Section */
+        .faq-section {
+            background: #f8f9fa;
+            padding: 30px;
+            border-radius: 12px;
+            margin: 30px 0;
+        }
+
+        .faq-item {
+            margin-bottom: 20px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .faq-item:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .faq-question {
+            color: #2c3e50;
+            font-weight: 600;
+            margin-bottom: 10px;
+            font-size: 1.1em;
+        }
+
+        .faq-answer {
+            color: #555;
+            line-height: 1.6;
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            margin-top: 60px;
+            padding-top: 30px;
+            border-top: 2px solid #ecf0f1;
+            color: #7f8c8d;
+        }
+
+        .footer-links {
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
             gap: 20px;
         }
 
-        /* Reklam Kutuları Görseli */
-        .ad-placeholder {
-            background: #e1e4e8;
-            color: #7f8c8d;
-            border: 1px solid #bdc3c7;
-            height: 600px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            font-size: 0.8em;
-            font-weight: bold;
-            border-radius: 4px;
+        .footer-links a {
+            color: #3498db;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
         }
 
-        /* Yatay Reklam Alanı */
-        .ad-horizontal {
-            background: #f8f9fa;
-            border: 1px solid #ddd;
-            height: 90px;
-            margin: 20px 0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #95a5a6;
-            border-radius: 4px;
+        .footer-links a:hover {
+            color: #2980b9;
+            text-decoration: underline;
         }
 
-        /* Mobilde reklamları gizle (Kullanıcı deneyimi için) */
-        @media (max-width: 1100px) {
-            .ad-sidebar {
-                display: none;
+        .copyright {
+            font-size: 0.9em;
+            margin-top: 10px;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 25px;
+                margin: 15px;
+            }
+
+            header h1 {
+                font-size: 2em;
+            }
+
+            .upload-section {
+                padding: 25px;
+            }
+
+            .btn-upload {
+                padding: 14px 30px;
+            }
+
+            .main-layout {
+                padding: 15px;
+            }
+
+            nav ul {
+                gap: 15px;
+                flex-wrap: wrap;
+            }
+
+            .footer-links {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            table, .comparison-table {
+                display: block;
+                overflow-x: auto;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 20px;
+            }
+
+            header h1 {
+                font-size: 1.7em;
+            }
+
+            .upload-section {
+                padding: 20px;
+            }
+
+            .btn-upload {
+                width: 100%;
+                padding: 14px;
+            }
+
+            .actions {
+                flex-direction: column;
+                gap: 8px;
+            }
+
+            .btn-action {
+                width: 100%;
+                text-align: center;
             }
         }
     </style>
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8834418381944115"
-            crossorigin="anonymous"></script>
+
+    <!-- Google AdSense -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8834418381944115" crossorigin="anonymous"></script>
 </head>
 <body>
 
 <nav>
-    <ul>
-        <li><a href="/">Home</a></li>
-        <li id="nav-toggle-container">
-            <span>Services</span>
-            <ul id="nav-toggle">
-                <li><a href="/image_converter">Image Converter</a></li>
-            </ul>
-        </li>
-        <li><a href="/contact_me">Contact</a></li>
-    </ul>
+    <div class="nav-container">
+        <ul>
+            <li><a href="/">Home</a></li>
+            <li id="nav-toggle-container">
+                <span>Services</span>
+                <ul id="nav-toggle">
+                    <li><a href="/image_converter">Image Converter</a></li>
+                </ul>
+            </li>
+            <li><a href="/contact_me">Contact</a></li>
+            <li><a href="/privacy_policy">Privacy Policy</a></li>
+            <li><a href="/terms_of_service">Terms of Service</a></li>
+        </ul>
+    </div>
 </nav>
+
 <div class="main-layout">
-    <aside class="ad-sidebar ad-left">
-        <div class="ad-placeholder">
-            <a href="/banner1_clicked/">
-                <img src="../assets/img/ads/banner1.png" alt="Reklam" style="width:100%; height:auto;">
-            </a>
+    <div class="container">
+        <header>
+            <h1>Free Image Converter</h1>
+            <p>Convert your images between JPG, PNG, WebP, BMP, and TIFF formats instantly. No registration required, completely free!</p>
+        </header>
+
+        <section class="upload-section">
+            <h2>Convert Your Images Now</h2>
+            <form action="/image_converter/upload/" method="POST" enctype="multipart/form-data">
+                <div class="form-group">
+                    <label for="image" class="form-label">Select Image File:</label>
+                    <input type="file" name="image" id="image" accept="image/*" required class="form-input">
+                </div>
+
+                <div class="form-group">
+                    <label for="target_format" class="form-label">Choose Output Format:</label>
+                    <select name="target_format" id="target_format" class="form-select">
+                        <optgroup label="Image Formats">
+                            <option value=".jpg">JPG - Best for photos and web</option>
+                            <option value=".png">PNG - For transparency & graphics</option>
+                            <option value=".webp">WebP - Modern web format</option>
+                            <option value=".bmp">BMP - Uncompressed quality</option>
+                            <option value=".tiff">TIFF - Professional printing</option>
+                        </optgroup>
+                    </select>
+                </div>
+
+                <button type="submit" class="btn-upload">
+                    Start Conversion
+                </button>
+            </form>
+        </section>
+
+        <!-- Horizontal Ad -->
+        <div class="ad-horizontal">
+            <ins class="adsbygoogle"
+                 style="display:block"
+                 data-ad-client="ca-pub-8834418381944115"
+                 data-ad-slot="3807706731"
+                 data-ad-format="horizontal"
+                 data-full-width-responsive="true"></ins>
+            <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
         </div>
-    </aside>
-        <div class="container">
 
-            <header>
-                <h1>Image Converter</h1>
-                <p>Upload and manage your images</p>
-            </header>
+        <section class="image-list">
+            <h2>Your Converted Images</h2>
+            <table>
+                <thead>
+                <tr>
+                    <th>Image Name</th>
+                    <th style="width: 200px;">Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                {{#uploaded_images}}
+                <tr>
+                    <td>{{.}}</td>
+                    <td class="actions">
+                        <a href="/download/{{.}}" class="btn-action btn-download">Download</a>
+                        <a href="/image_converter/delete/{{.}}" class="btn-action btn-delete">Delete</a>
+                    </td>
+                </tr>
+                {{/uploaded_images}}
+                {{^uploaded_images}}
+                <tr>
+                    <td colspan="2" style="text-align: center; color: #95a5a6; padding: 30px;">
+                        No images uploaded yet. Upload your first image above!
+                    </td>
+                </tr>
+                {{/uploaded_images}}
+                </tbody>
+            </table>
+        </section>
 
-            <section class="upload-section">
-                <h2>Image Conversion Center</h2>
-                <form action="/image_converter/upload/" method="POST" enctype="multipart/form-data">
+        <section class="content-section">
+            <h2>Comprehensive Image Conversion Guide</h2>
+            <p>Welcome to our free online image converter, a powerful tool designed to help you transform your images between various formats with ease. Whether you're a photographer, web developer, graphic designer, or casual user, our converter provides professional-grade conversion without any cost or registration.</p>
 
-                    <div style="margin-bottom: 25px; text-align: left; max-width: 500px; margin-left: auto; margin-right: auto;">
-                        <label for="image" style="display:block; margin-bottom:8px; font-weight:bold; color: #2c3e50;">
-                            Select Image:
-                        </label>
-                        <input type="file" name="image" id="image" accept="image/*" required
-                               style="width: 100%; padding: 10px; background: white; border: 1px solid #ddd; border-radius: 4px;">
-                    </div>
+            <h3>Supported Image Formats</h3>
+            <p>Our converter supports all major image formats, each serving different purposes:</p>
+            <ul>
+                <li><strong>JPG/JPEG (Joint Photographic Experts Group):</strong> The most widely used format for photographs and web images. Uses lossy compression to reduce file size while maintaining good visual quality. Ideal for digital cameras, websites, and social media.</li>
+                <li><strong>PNG (Portable Network Graphics):</strong> Developed as an improved replacement for GIF, PNG supports lossless compression and transparency. Perfect for logos, graphics, screenshots, and images requiring transparent backgrounds.</li>
+                <li><strong>WebP:</strong> Google's modern image format offering superior compression. WebP images are 25-35% smaller than equivalent JPG images while maintaining similar quality. Supported by all modern browsers.</li>
+                <li><strong>BMP (Bitmap):</strong> An uncompressed format that preserves maximum quality. BMP files are large but maintain every pixel's original data. Commonly used in Windows applications.</li>
+                <li><strong>TIFF (Tagged Image File Format):</strong> A professional format used in photography, printing, and graphic design. Supports lossless compression and multiple layers. Industry standard for high-quality printing.</li>
+            </ul>
 
-                    <div style="margin-bottom: 25px; text-align: left; max-width: 500px; margin-left: auto; margin-right: auto;">
-                        <label for="target_format" style="display:block; margin-bottom:8px; font-weight:bold; color: #2c3e50;">
-                            Target Format:
-                        </label>
-                        <select name="target_format" id="target_format"
-                                style="width: 100%; padding: 12px; border-radius: 4px; border: 1px solid #3498db; background: white; font-family: inherit; font-size: 1em; cursor: pointer;">
+            <h3>How to Use Our Converter</h3>
+            <ol>
+                <li><strong>Select Your Image:</strong> Click the upload button and choose any image file from your device (JPG, PNG, GIF, BMP, WebP, or TIFF).</li>
+                <li><strong>Choose Output Format:</strong> Select your desired format from the dropdown menu. Each format has specific advantages explained in our comparison table below.</li>
+                <li><strong>Convert & Download:</strong> Click "Start Conversion" and wait a few seconds. Your converted image will be ready for download automatically.</li>
+                <li><strong>Manage Files:</strong> All converted images appear in the table above where you can download or delete them as needed.</li>
+            </ol>
 
-                            <optgroup label="Image Formats">
-                                <option value=".jpg">JPG (Standard)</option>
-                                <option value=".png">PNG (Transparent / Lossless)</option>
-                                <option value=".webp">WebP (Modern Web)</option>
-                                <option value=".bmp">BMP (Uncompressed)</option>
-                                <option value=".tiff">TIFF (High Quality)</option>
-                            </optgroup>
-                        </select>
-                    </div>
+            <h3>Privacy & Security Guarantee</h3>
+            <p>We take your privacy seriously. All image conversions happen on our secure servers, and your original files are never stored permanently. Every uploaded image is automatically deleted within 24 hours of conversion. We don't share, sell, or analyze your images - they're processed solely for conversion purposes. No registration or personal information is required to use our service.</p>
+        </section>
 
-                    <button type="submit" class="btn-upload" style="width: 500px; max-width: 100%;">
-                        Start Conversion
-                    </button>
-                </form>
-            </section>
+        <section class="technical-details">
+            <h2>Technical Specifications & Best Practices</h2>
 
-            <div class="ad-horizontal">
-                <a href="/list_banner_clicked/">
-                    <img src="../assets/img/ads/list_banner.png" alt="Reklam" style="width:100%; height:auto;">
-                </a>
+            <h3>Understanding Image Compression</h3>
+            <p>Image compression reduces file size through mathematical algorithms. There are two primary types:</p>
+            <ul>
+                <li><strong>Lossy Compression (JPG, WebP):</strong> Permanently removes some image data to achieve smaller file sizes. The amount of compression can be adjusted - higher compression means smaller files but lower quality.</li>
+                <li><strong>Lossless Compression (PNG, TIFF, BMP):</strong> Preserves all original image data without quality loss. Files are larger but maintain perfect quality, essential for professional work.</li>
+            </ul>
+
+            <h3>Image Format Comparison Table</h3>
+            <table class="comparison-table">
+                <thead>
+                <tr>
+                    <th>Format</th>
+                    <th>Best For</th>
+                    <th>Compression</th>
+                    <th>Transparency</th>
+                    <th>File Size</th>
+                    <th>Browser Support</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td><strong>JPG</strong></td>
+                    <td>Photographs, Web Images</td>
+                    <td>Lossy</td>
+                    <td>No</td>
+                    <td>Small</td>
+                    <td>Universal</td>
+                </tr>
+                <tr>
+                    <td><strong>PNG</strong></td>
+                    <td>Logos, Graphics, Screenshots</td>
+                    <td>Lossless</td>
+                    <td>Yes (Alpha)</td>
+                    <td>Medium-Large</td>
+                    <td>Universal</td>
+                </tr>
+                <tr>
+                    <td><strong>WebP</strong></td>
+                    <td>Modern Websites, Mobile</td>
+                    <td>Both</td>
+                    <td>Yes</td>
+                    <td>Very Small</td>
+                    <td>Modern Browsers</td>
+                </tr>
+                <tr>
+                    <td><strong>BMP</strong></td>
+                    <td>Windows Applications</td>
+                    <td>None</td>
+                    <td>No</td>
+                    <td>Very Large</td>
+                    <td>Universal</td>
+                </tr>
+                <tr>
+                    <td><strong>TIFF</strong></td>
+                    <td>Printing, Professional Editing</td>
+                    <td>Lossless</td>
+                    <td>Yes</td>
+                    <td>Large</td>
+                    <td>Limited</td>
+                </tr>
+                </tbody>
+            </table>
+
+            <h3>Common Use Cases & Recommendations</h3>
+            <div class="use-cases-box">
+                <h4>For Website Owners & Developers:</h4>
+                <p>Use WebP format for modern browsers (Chrome, Edge, Firefox, Safari 14+) with JPG fallbacks for compatibility. WebP reduces page load times by 25-35% compared to JPG. For product images, use optimized JPG at 80-85% quality. For icons and logos, PNG-8 or PNG-24 with transparency.</p>
+
+                <h4>For Social Media & Content Creators:</h4>
+                <p>Instagram prefers JPG with 1080px width. Facebook accepts both JPG and PNG - use PNG for graphics with text, JPG for photos. Twitter works best with WebP for faster loading. LinkedIn prefers PNG for professional graphics. Always check platform-specific guidelines for optimal dimensions.</p>
+
+                <h4>For Print & Professional Work:</h4>
+                <p>TIFF or high-resolution JPG with 300 DPI minimum is essential for professional printing. Use CMYK color profile for offset printing (though our converter outputs RGB suitable for most modern printers). For archival purposes, TIFF with LZW compression provides perfect quality preservation.</p>
+
+                <h4>For Mobile Applications:</h4>
+                <p>WebP is ideal for mobile apps due to its small file size and good compression. For iOS development, HEIC format is native but can be converted to JPG for cross-platform compatibility. PNG is best for app icons and interface elements requiring transparency.</p>
             </div>
 
-            <section class="image-list">
-                <h2>Converted Images</h2>
-                <table>
-                    <thead>
-                    <tr>
-                        <th>Image Name</th>
-                        <th style="width: 150px;">Actions</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    {{#uploaded_images}}
-                    <tr>
-                        <td>{{.}}</td>
-                        <td class="actions">
-                            <a href="/download/{{.}}" class="btn-action btn-download">Download</a>
-                            <a href="/image_converter/delete/{{.}}" class="btn-action btn-delete">Delete</a>
-                        </td>
-                    </tr>
-                    {{/uploaded_images}}
-                    {{^uploaded_images}}
-                    <tr>
-                        <td colspan="2" style="text-align: center; color: #95a5a6; padding: 20px;">
-                            No images uploaded yet.
-                        </td>
-                    </tr>
-                    {{/uploaded_images}}
-                    </tbody>
-                </table>
-            </section>
+            <h3>Frequently Asked Questions</h3>
+            <div class="faq-section">
+                <div class="faq-item">
+                    <div class="faq-question">Q: Is this image converter completely free?</div>
+                    <div class="faq-answer">A: Yes, absolutely free! No hidden charges, no subscriptions, and no registration required. We believe in providing valuable tools without barriers.</div>
+                </div>
 
+                <div class="faq-item">
+                    <div class="faq-question">Q: Are my uploaded images safe and private?</div>
+                    <div class="faq-answer">A: Your privacy is our priority. All images are automatically deleted from our servers within 24 hours. We don't store, share, or analyze your files - they're processed solely for conversion.</div>
+                </div>
 
-            <footer>
-                © 2026 {{name}} {{surname}} - All Rights Reserved. <a href="/privacy_policy/">privacy and policy</a>
-            </footer>
-        </div>
+                <div class="faq-item">
+                    <div class="faq-question">Q: What is the maximum file size I can convert?</div>
+                    <div class="faq-answer">A: Currently, we support files up to 50MB for optimal performance. This covers most photographic and graphic needs. Larger files may take longer to process.</div>
+                </div>
 
-    <aside class="ad-sidebar ad-right">
-        <div class="ad-placeholder">
-            <a href="/banner2_clicked/">
-                <img src="../assets/img/ads/banner2.png" alt="Reklam" style="width:100%; height:auto;">
-            </a>
-        </div>
-    </aside>
+                <div class="faq-item">
+                    <div class="faq-question">Q: Which format should I use for website images?</div>
+                    <div class="faq-answer">A: For modern websites, WebP is ideal with JPG fallbacks. For maximum compatibility, use JPG for photos and PNG for graphics with transparency. Always optimize images before uploading to your site.</div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">Q: Can I convert multiple images at once?</div>
+                    <div class="faq-answer">A: Currently, our converter processes one image at a time to ensure quality and security. For batch conversion, you can convert images sequentially.</div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">Q: Do you support CMYK to RGB conversion?</div>
+                    <div class="faq-answer">A: Yes, our converter automatically handles color space conversion. Images are converted to sRGB (standard for web and displays) unless the source format supports color profiles.</div>
+                </div>
+            </div>
+        </section>
+
+        <footer>
+            <div class="footer-links">
+                <a href="/">Home</a>
+                <a href="/image_converter">Image Converter</a>
+                <a href="/contact_me">Contact Us</a>
+                <a href="/privacy_policy">Privacy Policy</a>
+                <a href="/terms_of_service">Terms of Service</a>
+            </div>
+            <p class="copyright">© 2024 {{name}} {{surname}}. All Rights Reserved.</p>
+            <p class="copyright">This free image conversion tool is provided for personal and commercial use. All converted images are automatically deleted within 24 hours for your privacy.</p>
+        </footer>
+    </div>
 </div>
+
 <script>
+    // Navigation dropdown functionality
     var container = document.getElementById("nav-toggle-container");
     var menu = document.getElementById("nav-toggle");
 
-    container.addEventListener("mouseover", function() {
-        menu.style.display = "block";
+    if (container && menu) {
+        container.addEventListener("mouseover", function() {
+            menu.style.display = "block";
+        });
+
+        container.addEventListener("mouseout", function(e) {
+            // Check if mouse is moving to menu
+            if (!menu.contains(e.relatedTarget)) {
+                menu.style.display = "none";
+            }
+        });
+
+        menu.addEventListener("mouseout", function(e) {
+            // Check if mouse is moving back to container
+            if (!container.contains(e.relatedTarget)) {
+                menu.style.display = "none";
+            }
+        });
+    }
+
+    // Initialize AdSense ads
+    window.addEventListener('load', function() {
+        (adsbygoogle = window.adsbygoogle || []).push({});
     });
 
-    container.addEventListener("mouseout", function() {
-        menu.style.display = "none";
-    });
+    // File input styling
+    const fileInput = document.getElementById('image');
+    if (fileInput) {
+        fileInput.addEventListener('change', function(e) {
+            if (this.files && this.files[0]) {
+                const fileName = this.files[0].name;
+                // You could display the file name somewhere
+                console.log('Selected file:', fileName);
+            }
+        });
+    }
 </script>
 
 </body>
