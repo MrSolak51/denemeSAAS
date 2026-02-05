@@ -1,8 +1,10 @@
 #include <crow.h>
 #include <string>
 #include <fstream>
+#include <sstream>
 #include <vector>
 #include <sstream>
+#include <map>
 #include <filesystem>
 #include <algorithm>
 #include <chrono>
@@ -12,6 +14,7 @@
 #include "ImageConverter.h"
 
 namespace fs = std::filesystem;
+
 
 // ----------------------------------------------------------------
 // HELPER FUNCTIONS
@@ -80,6 +83,26 @@ void appendCSV(std::string fileName, std::vector<std::string> values) {
     file.close();
 }
 
+// CSV'den belirli bir anahtara (banner1 vb.) ait linki çeken fonksiyon
+std::string get_link_from_csv(std::string banner_key) {
+    std::ifstream file("db/ad_links.csv");
+    std::string line;
+
+    while (std::getline(file, line)) {
+        std::stringstream ss(line);
+        std::string key, url;
+
+        if (std::getline(ss, key, ',') && std::getline(ss, url, ',')) {
+            // Eğer aradığımız banner ismini bulursak linki dön
+            if (key == banner_key) {
+                return url;
+            }
+        }
+    }
+    // Eğer CSV'de bulunamazsa güvenli bir yere (anasayfaya) gönder
+    return "/";
+}
+
 // ----------------------------------------------------------------
 // MAIN
 // ----------------------------------------------------------------
@@ -92,13 +115,33 @@ int main() {
     fs::create_directories("out_files");
     fs::create_directories("db");
 
+    // Assets klasörü altındaki tüm dosyaları (reklamlar, logolar vb.) sunmak için:
+    CROW_ROUTE(app, "/assets/<path>")
+    ([](const crow::request& req, crow::response& res, std::string path) {
+        // path değişkeni "img/ads/banner1.jpeg" gibi değerler alacaktır.
+        // Dosyanın tam yolunu belirtiyoruz:
+        std::string local_path = "assets/" + path;
+
+        // Crow'a bu yolu statik dosya olarak yüklemesini söylüyoruz
+        res.set_static_file_info(local_path);
+        res.end();
+    });
+
+
+    CROW_ROUTE(app, "/privacy_policy")
+       ([]() {
+           crow::mustache::context ctx;
+           ctx["name"] = "Metehan";
+           ctx["surname"] = "TURGUT";
+           return crow::mustache::load("privacy_policy.html").render(ctx);
+       });
     // 1. HOME PAGE
     CROW_ROUTE(app, "/")
     ([]() {
         crow::mustache::context ctx;
         ctx["name"] = "Metehan";
         ctx["surname"] = "TURGUT";
-        ctx["about_me"] = "I completely mastered computers.";
+        ctx["about_me"] = "";
         ctx["educations"] = readCSV("db/educations.csv", {"school_name", "department", "date"});
         ctx["experiences"] = readCSV("db/experiences.csv", {"company", "position", "date", "details"});
         ctx["skills"] = readCSV("db/skills.csv", {"skill_name", "skill_level"});
@@ -116,6 +159,38 @@ int main() {
         ctx["tel"] = "+90 532 485 3665";
         return crow::mustache::load("contact_me.html").render(ctx);
     });
+
+    CROW_ROUTE(app, "/banner1_clicked/")
+    ([](crow::response& res) {
+        // Tıklama bilgisini dosyaya kaydet (opsiyonel)
+        std::ofstream log("db/ad_clicks.txt", std::ios::app);
+        log << "Banner1 tıklandı - Tarih: ... \n";
+
+        res.redirect(get_link_from_csv("banner1"));
+        res.end();
+    });
+
+    CROW_ROUTE(app, "/banner2_clicked/")
+    ([](crow::response& res) {
+        // Tıklama bilgisini dosyaya kaydet (opsiyonel)
+        std::ofstream log("db/ad_clicks.txt", std::ios::app);
+        log << "Banner2 tıklandı - Tarih: ... \n";
+
+        res.redirect(get_link_from_csv("banner2"));
+        res.end();
+    });
+
+    CROW_ROUTE(app, "/list_banner_clicked/")
+    ([](crow::response& res) {
+        // Tıklama bilgisini dosyaya kaydet (opsiyonel)
+        std::ofstream log("db/ad_clicks.txt", std::ios::app);
+        log << "List Banner tıklandı - Tarih: ... \n";
+
+        res.redirect(get_link_from_csv("list_banner"));
+        res.end();
+    });
+
+
 
     // 3. IMAGE CONVERTER INTERFACE (Session Managed)
     CROW_ROUTE(app, "/image_converter/")

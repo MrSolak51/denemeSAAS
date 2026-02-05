@@ -154,7 +154,66 @@
             font-size: 0.8em;
             color: #bdc3c7;
         }
+
+
+        /* Ana Layout Düzeni */
+        .main-layout {
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            gap: 20px;
+            padding: 20px;
+            max-width: 1400px; /* Kenarlar dahil toplam genişlik */
+            margin: 0 auto;
+        }
+
+        /* Yan Reklam Panelleri */
+        .ad-sidebar {
+            width: 160px;
+            position: sticky;
+            top: 80px; /* Navigasyonun altında sabit kalması için */
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        /* Reklam Kutuları Görseli */
+        .ad-placeholder {
+            background: #e1e4e8;
+            color: #7f8c8d;
+            border: 1px solid #bdc3c7;
+            height: 600px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            font-size: 0.8em;
+            font-weight: bold;
+            border-radius: 4px;
+        }
+
+        /* Yatay Reklam Alanı */
+        .ad-horizontal {
+            background: #f8f9fa;
+            border: 1px solid #ddd;
+            height: 90px;
+            margin: 20px 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #95a5a6;
+            border-radius: 4px;
+        }
+
+        /* Mobilde reklamları gizle (Kullanıcı deneyimi için) */
+        @media (max-width: 1100px) {
+            .ad-sidebar {
+                display: none;
+            }
+        }
     </style>
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8834418381944115"
+            crossorigin="anonymous"></script>
 </head>
 <body>
 
@@ -170,87 +229,106 @@
         <li><a href="/contact_me">Contact</a></li>
     </ul>
 </nav>
+<div class="main-layout">
+    <aside class="ad-sidebar ad-left">
+        <div class="ad-placeholder">
+            <a href="/banner1_clicked/">
+                <img src="../assets/img/ads/banner1.png" alt="Reklam" style="width:100%; height:auto;">
+            </a>
+        </div>
+    </aside>
+        <div class="container">
 
-<div class="container">
-    <header>
-        <h1>Image Converter</h1>
-        <p>Upload and manage your images</p>
-    </header>
+            <header>
+                <h1>Image Converter</h1>
+                <p>Upload and manage your images</p>
+            </header>
 
-    <section class="upload-section">
-        <h2>Image Conversion Center</h2>
-        <form action="/image_converter/upload/" method="POST" enctype="multipart/form-data">
+            <section class="upload-section">
+                <h2>Image Conversion Center</h2>
+                <form action="/image_converter/upload/" method="POST" enctype="multipart/form-data">
 
-            <div style="margin-bottom: 25px; text-align: left; max-width: 500px; margin-left: auto; margin-right: auto;">
-                <label for="image" style="display:block; margin-bottom:8px; font-weight:bold; color: #2c3e50;">
-                    Select Image:
-                </label>
-                <input type="image" name="image" id="image" required
-                       style="width: 100%; padding: 10px; background: white; border: 1px solid #ddd; border-radius: 4px;">
+                    <div style="margin-bottom: 25px; text-align: left; max-width: 500px; margin-left: auto; margin-right: auto;">
+                        <label for="image" style="display:block; margin-bottom:8px; font-weight:bold; color: #2c3e50;">
+                            Select Image:
+                        </label>
+                        <input type="file" name="image" id="image" accept="image/*" required
+                               style="width: 100%; padding: 10px; background: white; border: 1px solid #ddd; border-radius: 4px;">
+                    </div>
+
+                    <div style="margin-bottom: 25px; text-align: left; max-width: 500px; margin-left: auto; margin-right: auto;">
+                        <label for="target_format" style="display:block; margin-bottom:8px; font-weight:bold; color: #2c3e50;">
+                            Target Format:
+                        </label>
+                        <select name="target_format" id="target_format"
+                                style="width: 100%; padding: 12px; border-radius: 4px; border: 1px solid #3498db; background: white; font-family: inherit; font-size: 1em; cursor: pointer;">
+
+                            <optgroup label="Image Formats">
+                                <option value=".jpg">JPG (Standard)</option>
+                                <option value=".png">PNG (Transparent / Lossless)</option>
+                                <option value=".webp">WebP (Modern Web)</option>
+                                <option value=".bmp">BMP (Uncompressed)</option>
+                                <option value=".tiff">TIFF (High Quality)</option>
+                            </optgroup>
+                        </select>
+                    </div>
+
+                    <button type="submit" class="btn-upload" style="width: 500px; max-width: 100%;">
+                        Start Conversion
+                    </button>
+                </form>
+            </section>
+
+            <div class="ad-horizontal">
+                <a href="/list_banner_clicked/">
+                    <img src="../assets/img/ads/list_banner.png" alt="Reklam" style="width:100%; height:auto;">
+                </a>
             </div>
 
-            <div style="margin-bottom: 25px; text-align: left; max-width: 500px; margin-left: auto; margin-right: auto;">
-                <label for="target_format" style="display:block; margin-bottom:8px; font-weight:bold; color: #2c3e50;">
-                    Target Format:
-                </label>
-                <select name="target_format" id="target_format"
-                        style="width: 100%; padding: 12px; border-radius: 4px; border: 1px solid #3498db; background: white; font-family: inherit; font-size: 1em; cursor: pointer;">
+            <section class="image-list">
+                <h2>Converted Images</h2>
+                <table>
+                    <thead>
+                    <tr>
+                        <th>Image Name</th>
+                        <th style="width: 150px;">Actions</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {{#uploaded_images}}
+                    <tr>
+                        <td>{{.}}</td>
+                        <td class="actions">
+                            <a href="/download/{{.}}" class="btn-action btn-download">Download</a>
+                            <a href="/image_converter/delete/{{.}}" class="btn-action btn-delete">Delete</a>
+                        </td>
+                    </tr>
+                    {{/uploaded_images}}
+                    {{^uploaded_images}}
+                    <tr>
+                        <td colspan="2" style="text-align: center; color: #95a5a6; padding: 20px;">
+                            No images uploaded yet.
+                        </td>
+                    </tr>
+                    {{/uploaded_images}}
+                    </tbody>
+                </table>
+            </section>
 
-                    <optgroup label="Image Formats">
-                        <option value=".jpg">JPG (Standard)</option>
-                        <option value=".png">PNG (Transparent / Lossless)</option>
-                        <option value=".webp">WebP (Modern Web)</option>
-                        <option value=".bmp">BMP (Uncompressed)</option>
-                        <option value=".tiff">TIFF (High Quality)</option>
-                    </optgroup>
-                </select>
-            </div>
 
-            <button type="submit" class="btn-upload" style="width: 500px; max-width: 100%;">
-                Start Conversion
-            </button>
-        </form>
-    </section>
+            <footer>
+                © 2026 {{name}} {{surname}} - All Rights Reserved. <a href="/privacy_policy/">privacy and policy</a>
+            </footer>
+        </div>
 
-    <section class="image-list">
-        <h2>Converted Images</h2>
-        <table>
-            <thead>
-            <tr>
-                <th>Image Name</th>
-                <th style="width: 150px;">Actions</th>
-            </tr>
-            </thead>
-            <tbody>
-            {{#uploaded_images}}
-            <tr>
-                <td>{{.}}</td>
-                <td class="actions">
-                    <a href="/download/{{.}}" class="btn-action btn-download">Download</a>
-                    <a href="/image_converter/delete/{{.}}" class="btn-action btn-delete">Delete</a>
-                </td>
-            </tr>
-            {{/uploaded_images}}
-            {{^uploaded_images}}
-            <tr>
-                <td colspan="2" style="text-align: center; color: #95a5a6; padding: 20px;">
-                    No images uploaded yet.
-                </td>
-            </tr>
-            {{/uploaded_images}}
-            </tbody>
-        </table>
-    </section>
-
-    <footer>
-        &copy; 2026
-        <a href="/" style="color: #bdc3c7; text-decoration: none;">
-            {{name}} {{surname}}
-        </a>
-        - All Rights Reserved.
-    </footer>
+    <aside class="ad-sidebar ad-right">
+        <div class="ad-placeholder">
+            <a href="/banner2_clicked/">
+                <img src="../assets/img/ads/banner2.png" alt="Reklam" style="width:100%; height:auto;">
+            </a>
+        </div>
+    </aside>
 </div>
-
 <script>
     var container = document.getElementById("nav-toggle-container");
     var menu = document.getElementById("nav-toggle");
