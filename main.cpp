@@ -20,6 +20,61 @@ namespace fs = std::filesystem;
 // HELPER FUNCTIONS
 // ----------------------------------------------------------------
 
+
+std::string get_html(std::string html_name) {
+    std::string html_string;
+    std::string line;
+
+    std::ifstream file(html_name);
+    if (!file.is_open()) return " ";
+
+    while (std::getline(file, line)) {
+        html_string.append(line);
+        html_string.append("\n");
+    }
+
+    return  html_string;
+}
+
+std::string get_current_timestamp() {
+    auto now = std::chrono::system_clock::now();
+    auto in_time_t = std::chrono::system_clock::to_time_t(now);
+    std::stringstream ss;
+    ss << std::put_time(std::localtime(&in_time_t), "%Y%m%d_%H%M%S");
+    return ss.str();
+}
+
+// ARKA PLANDA ÇALIŞAN TEMİZLİK FONKSİYONU (24 Saat Kuralı)
+void start_cleanup_thread(std::string folder_path) {
+    CROW_LOG_INFO << "Started Auto Cleaner";
+    std::thread([folder_path]() {
+        while (true) {
+            auto now = std::chrono::system_clock::now();
+            try {
+                if (fs::exists(folder_path)) {
+                    for (const auto& entry : fs::directory_iterator(folder_path)) {
+                        auto last_write = fs::last_write_time(entry.path());
+                        // Dosya zamanını sistem zamanına dönüştür
+                        auto s_last_write = std::chrono::time_point_cast<std::chrono::system_clock::duration>(
+                            last_write - fs::file_time_type::clock::now() + std::chrono::system_clock::now()
+                        );
+
+                        auto age = std::chrono::duration_cast<std::chrono::hours>(now - s_last_write);
+
+                        if (age.count() >= 24) { // 24 saat sınırı
+                            fs::remove(entry.path());
+                            CROW_LOG_INFO << "Auto-deleted old file: " << entry.path().string();
+                        }
+                    }
+                }
+            } catch (const std::exception& e) {
+                CROW_LOG_ERROR << "Cleanup Error: " << e.what();
+            }
+            std::this_thread::sleep_for(std::chrono::hours(1)); // Her saat başı kontrol et
+        }
+    }).detach();
+}
+
 // Unique ID generator (for Session ID)
 std::string generate_user_id() {
     auto now = std::chrono::system_clock::now().time_since_epoch().count();
@@ -110,6 +165,8 @@ std::string get_link_from_csv(std::string banner_key) {
 int main() {
     crow::SimpleApp app;
 
+    start_cleanup_thread("out_files");
+
     // Create required directories at startup
     fs::create_directories("in_files");
     fs::create_directories("out_files");
@@ -133,6 +190,8 @@ int main() {
            crow::mustache::context ctx;
            ctx["name"] = "Metehan";
            ctx["surname"] = "TURGUT";
+
+           ctx["nav"] = get_html("templates/nav.html");
            return crow::mustache::load("privacy_policy.html").render(ctx);
     });
     CROW_ROUTE(app, "/terms_of_service/")
@@ -140,6 +199,7 @@ int main() {
            crow::mustache::context ctx;
            ctx["name"] = "Metehan";
            ctx["surname"] = "TURGUT";
+           ctx["nav"] = get_html("templates/nav.html");
            return crow::mustache::load("terms_of_service.html").render(ctx);
        });
     // 1. HOME PAGE
@@ -152,6 +212,8 @@ int main() {
         ctx["educations"] = readCSV("db/educations.csv", {"school_name", "department", "date"});
         ctx["experiences"] = readCSV("db/experiences.csv", {"company", "position", "date", "details"});
         ctx["skills"] = readCSV("db/skills.csv", {"skill_name", "skill_level"});
+
+        ctx["nav"] = get_html("templates/nav.html");
         return crow::mustache::load("index.html").render(ctx);
     });
 
@@ -164,37 +226,9 @@ int main() {
         ctx["address"] = "Elazig, Turkey";
         ctx["mail"] = "metehanturgut794@gmail.com";
         ctx["tel"] = "+90 532 485 3665";
+
+        ctx["nav"] = get_html("templates/nav.html");
         return crow::mustache::load("contact_me.html").render(ctx);
-    });
-
-    CROW_ROUTE(app, "/banner1_clicked/")
-    ([](crow::response& res) {
-        // Tıklama bilgisini dosyaya kaydet (opsiyonel)
-        std::ofstream log("db/ad_clicks.txt", std::ios::app);
-        log << "Banner1 tıklandı - Tarih: ... \n";
-
-        res.redirect(get_link_from_csv("banner1"));
-        res.end();
-    });
-
-    CROW_ROUTE(app, "/banner2_clicked/")
-    ([](crow::response& res) {
-        // Tıklama bilgisini dosyaya kaydet (opsiyonel)
-        std::ofstream log("db/ad_clicks.txt", std::ios::app);
-        log << "Banner2 tıklandı - Tarih: ... \n";
-
-        res.redirect(get_link_from_csv("banner2"));
-        res.end();
-    });
-
-    CROW_ROUTE(app, "/list_banner_clicked/")
-    ([](crow::response& res) {
-        // Tıklama bilgisini dosyaya kaydet (opsiyonel)
-        std::ofstream log("db/ad_clicks.txt", std::ios::app);
-        log << "List Banner tıklandı - Tarih: ... \n";
-
-        res.redirect(get_link_from_csv("list_banner"));
-        res.end();
     });
 
 
@@ -205,6 +239,8 @@ int main() {
         crow::mustache::context ctx;
         ctx["name"] = "Metehan";
         ctx["surname"] = "TURGUT";
+
+        ctx["nav"] = get_html("templates/nav.html");
 
         // Session ID check
         std::string user_id = get_session_id(req);
@@ -293,8 +329,8 @@ int main() {
             return crow::response(500, "Server failed to save the file.");
         }
 
-        std::string base_filename = fs::path(filename).stem().string();
-        std::string out_filename = user_id + "_out_" + base_filename + target_ext;
+        std::string out_filename = user_id + "_out_" + fs::path(filename).stem().string() + "_" + get_current_timestamp() + target_ext;
+
 
         try {
             CROW_LOG_INFO << "Conversion started: " << unique_name << " -> " << out_filename;
@@ -377,3 +413,11 @@ int main() {
     // Start application
     app.port(8080).multithreaded().run();
 }
+
+
+
+
+
+
+
+

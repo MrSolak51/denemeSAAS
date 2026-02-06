@@ -11,7 +11,9 @@ include_directories(
 set(CMAKE_CXX_STANDARD 17)
 add_executable(server main.cpp
         ImageConverter.cpp
-        ImageConverter.h)
+        ImageConverter.h
+        DocumentConverter.cpp
+        DocumentConverter.h)
 
 
 target_link_libraries(server ${OpenCV_LIBRARIES})
