@@ -5,8 +5,8 @@
 #include "ImageConverter.h"
 
 ImageConverter::ImageConverter(std::string input, std::string output) {
-    this->input = "in_files/" + input;
-    this->output = "out_files/" + output;
+    this->input = "in_files/images/" + input;
+    this->output = "out_files/images/" + output;
 }
 
 int ImageConverter::convert() {

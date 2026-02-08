@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Free Image Converter | Convert JPG, PNG, WebP, BMP, TIFF | {{name}} {{surname}}</title>
+    <title>Free Document Converter | Convert DOCX, PDF, XLSX, PPTX | {{name}} {{surname}}</title>
 
     <!-- SEO Meta Tags -->
-    <meta name="description" content="Free online image converter tool. Convert between JPG, PNG, WebP, BMP, TIFF formats instantly. No registration required, secure processing, automatic file deletion.">
-    <meta name="keywords" content="image converter, convert image, JPG to PNG, PNG to JPG, WebP converter, free image tool, online image conversion, BMP converter, TIFF converter">
+    <meta name="description" content="Free online document converter tool. Convert between PDF, DOCX, XLSX, PPTX, TXT, RTF formats instantly. No registration required, secure processing, automatic file deletion.">
+    <meta name="keywords" content="document converter, PDF converter, DOCX to PDF, PDF to Word, Excel converter, PowerPoint converter, free document tool, online document conversion, file converter, office document converter">
     <meta name="author" content="{{name}} {{surname}}">
     <meta name="robots" content="index, follow">
 
@@ -249,12 +249,12 @@
             overflow: hidden;
         }
 
-        /* Image List */
-        .image-list {
+        /* Document List */
+        .document-list {
             margin-top: 40px;
         }
 
-        .image-list h2 {
+        .document-list h2 {
             color: #2c3e50;
             margin-bottom: 20px;
             font-size: 1.8em;
@@ -560,27 +560,44 @@
 <div class="main-layout">
     <div class="container">
         <header>
-            <h1>Free Image Converter</h1>
-            <p>Convert your images between JPG, PNG, WebP, BMP, and TIFF formats instantly. No registration required, completely free!</p>
+            <h1>Free Document Converter</h1>
+            <p>Convert your files between PDF, DOCX, XLSX, PPTX, and more instantly. No registration required, secure, and completely free!</p>
         </header>
 
         <section class="upload-section">
-            <h2>Convert Your Images Now</h2>
-            <form action="/image_converter/upload/" method="POST" enctype="multipart/form-data">
+            <h2>Convert Your Documents Now</h2>
+            <form action="/document_converter/upload/" method="POST" enctype="multipart/form-data">
                 <div class="form-group">
-                    <label for="image" class="form-label">Select Image File:</label>
-                    <input type="file" name="image" id="image" accept="image/*" required class="form-input">
+                    <label for="document" class="form-label">Select Document File:</label>
+                    <input type="file" name="document" id="document" accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.txt,.rtf,.odt,.ods,.odp,.csv,.html" required class="form-input">
                 </div>
 
                 <div class="form-group">
                     <label for="target_format" class="form-label">Choose Output Format:</label>
                     <select name="target_format" id="target_format" class="form-select">
-                        <optgroup label="Image Formats">
-                            <option value=".jpg">JPG - Best for photos and web</option>
-                            <option value=".png">PNG - For transparency & graphics</option>
-                            <option value=".webp">WebP - Modern web format</option>
-                            <option value=".bmp">BMP - Uncompressed quality</option>
-                            <option value=".tiff">TIFF - Professional printing</option>
+                        <optgroup label="PDF Documents">
+                            <option value="pdf">PDF - Portable Document Format</option>
+                        </optgroup>
+                        <optgroup label="Word Processing">
+                            <option value="docx">DOCX - Microsoft Word Document</option>
+                            <option value="doc">DOC - Microsoft Word 97-2003</option>
+                            <option value="odt">ODT - OpenDocument Text</option>
+                            <option value="rtf">RTF - Rich Text Format</option>
+                            <option value="txt">TXT - Plain Text</option>
+                        </optgroup>
+                        <optgroup label="Spreadsheets">
+                            <option value="xlsx">XLSX - Microsoft Excel</option>
+                            <option value="xls">XLS - Microsoft Excel 97-2003</option>
+                            <option value="ods">ODS - OpenDocument Spreadsheet</option>
+                            <option value="csv">CSV - Comma Separated Values</option>
+                        </optgroup>
+                        <optgroup label="Presentations">
+                            <option value="pptx">PPTX - Microsoft PowerPoint</option>
+                            <option value="ppt">PPT - Microsoft PowerPoint 97-2003</option>
+                            <option value="odp">ODP - OpenDocument Presentation</option>
+                        </optgroup>
+                        <optgroup label="Web Formats">
+                            <option value="html">HTML - Web Page Format</option>
                         </optgroup>
                     </select>
                 </div>
@@ -602,177 +619,197 @@
             <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
         </div>
 
-        <section class="image-list">
-            <h2>Your Converted Images</h2>
+        <section class="document-list">
+            <h2>Your Converted Documents</h2>
             <table>
                 <thead>
                 <tr>
-                    <th>Image Name</th>
+                    <th>Document Name</th>
                     <th style="width: 200px;">Actions</th>
                 </tr>
                 </thead>
                 <tbody>
-                {{#uploaded_images}}
+                {{#uploaded_documents}}
                 <tr>
                     <td>{{.}}</td>
                     <td class="actions">
-                        <a href="/download/image/{{.}}" class="btn-action btn-download">Download</a>
-                        <a href="/image_converter/delete/{{.}}" class="btn-action btn-delete">Delete</a>
+                        <a href="/download/document/{{.}}" class="btn-action btn-download">Download</a>
+                        <a href="/document_converter/delete/{{.}}" class="btn-action btn-delete">Delete</a>
                     </td>
                 </tr>
-                {{/uploaded_images}}
-                {{^uploaded_images}}
+                {{/uploaded_documents}}
+                {{^uploaded_documents}}
                 <tr>
                     <td colspan="2" style="text-align: center; color: #95a5a6; padding: 30px;">
-                        No images uploaded yet. Upload your first image above!
+                        No documents uploaded yet. Upload your first document above!
                     </td>
                 </tr>
-                {{/uploaded_images}}
+                {{/uploaded_documents}}
                 </tbody>
             </table>
         </section>
 
         <section class="content-section">
-            <h2>Comprehensive Image Conversion Guide</h2>
-            <p>Welcome to our free online image converter, a powerful tool designed to help you transform your images between various formats with ease. Whether you're a photographer, web developer, graphic designer, or casual user, our converter provides professional-grade conversion without any cost or registration.</p>
+            <h2>Comprehensive Document Conversion Guide</h2>
+            <p>Welcome to our free online document converter, a powerful tool designed to help you transform your documents between various formats with ease. Whether you're a student, professional, business owner, or casual user, our converter provides professional-grade conversion without any cost or registration.</p>
 
-            <h3>Supported Image Formats</h3>
-            <p>Our converter supports all major image formats, each serving different purposes:</p>
+            <h3>Supported Document Formats</h3>
+            <p>Our converter supports professional document standards for every need:</p>
             <ul>
-                <li><strong>JPG/JPEG (Joint Photographic Experts Group):</strong> The most widely used format for photographs and web images. Uses lossy compression to reduce file size while maintaining good visual quality. Ideal for digital cameras, websites, and social media.</li>
-                <li><strong>PNG (Portable Network Graphics):</strong> Developed as an improved replacement for GIF, PNG supports lossless compression and transparency. Perfect for logos, graphics, screenshots, and images requiring transparent backgrounds.</li>
-                <li><strong>WebP:</strong> Google's modern image format offering superior compression. WebP images are 25-35% smaller than equivalent JPG images while maintaining similar quality. Supported by all modern browsers.</li>
-                <li><strong>BMP (Bitmap):</strong> An uncompressed format that preserves maximum quality. BMP files are large but maintain every pixel's original data. Commonly used in Windows applications.</li>
-                <li><strong>TIFF (Tagged Image File Format):</strong> A professional format used in photography, printing, and graphic design. Supports lossless compression and multiple layers. Industry standard for high-quality printing.</li>
+                <li><strong>PDF (Portable Document Format):</strong> The universal standard for sharing documents. It preserves formatting across all devices and is ideal for final reports, resumes, and official forms.</li>
+                <li><strong>DOCX/DOC (Microsoft Word):</strong> The industry standard for word processing. Best for editable text documents, letters, and academic papers.</li>
+                <li><strong>XLSX/XLS (Microsoft Excel):</strong> Used for spreadsheets, data analysis, and financial reports. Supports complex formulas and data organization.</li>
+                <li><strong>PPTX/PPT (Microsoft PowerPoint):</strong> The go-to format for digital presentations, slideshows, and educational materials.</li>
+                <li><strong>TXT/RTF:</strong> Simple, lightweight formats for plain text or basic formatted text without the overhead of heavy software.</li>
+                <li><strong>ODT/ODS/ODP:</strong> OpenDocument formats, free alternatives to Microsoft Office documents, compatible with various office suites.</li>
+                <li><strong>HTML:</strong> Web page format for documents that need to be displayed in browsers.</li>
+                <li><strong>CSV:</strong> Simple format for tabular data, easily readable by spreadsheet programs.</li>
             </ul>
 
             <h3>How to Use Our Converter</h3>
             <ol>
-                <li><strong>Select Your Image:</strong> Click the upload button and choose any image file from your device (JPG, PNG, GIF, BMP, WebP, or TIFF).</li>
+                <li><strong>Select Your Document:</strong> Click the upload button and choose any document file from your device (PDF, DOCX, XLSX, PPTX, TXT, RTF, ODT, etc.).</li>
                 <li><strong>Choose Output Format:</strong> Select your desired format from the dropdown menu. Each format has specific advantages explained in our comparison table below.</li>
-                <li><strong>Convert & Download:</strong> Click "Start Conversion" and wait a few seconds. Your converted image will be ready for download automatically.</li>
-                <li><strong>Manage Files:</strong> All converted images appear in the table above where you can download or delete them as needed.</li>
+                <li><strong>Convert & Download:</strong> Click "Start Conversion" and wait a few seconds. Your converted document will be ready for download automatically.</li>
+                <li><strong>Manage Files:</strong> All converted documents appear in the table above where you can download or delete them as needed.</li>
             </ol>
 
             <h3>Privacy & Security Guarantee</h3>
-            <p>We take your privacy seriously. All image conversions happen on our secure servers, and your original files are never stored permanently. Every uploaded image is automatically deleted within 24 hours of conversion. We don't share, sell, or analyze your images - they're processed solely for conversion purposes. No registration or personal information is required to use our service.</p>
+            <p>We take your privacy seriously. All document conversions happen on our secure servers, and your original files are never stored permanently. Every uploaded document is automatically deleted within 24 hours of conversion. We don't share, sell, or analyze your documents - they're processed solely for conversion purposes. No registration or personal information is required to use our service.</p>
         </section>
 
         <section class="technical-details">
             <h2>Technical Specifications & Best Practices</h2>
 
-            <h3>Understanding Image Compression</h3>
-            <p>Image compression reduces file size through mathematical algorithms. There are two primary types:</p>
+            <h3>Understanding Document Formats</h3>
+            <p>Different document formats serve different purposes in professional and personal use:</p>
             <ul>
-                <li><strong>Lossy Compression (JPG, WebP):</strong> Permanently removes some image data to achieve smaller file sizes. The amount of compression can be adjusted - higher compression means smaller files but lower quality.</li>
-                <li><strong>Lossless Compression (PNG, TIFF, BMP):</strong> Preserves all original image data without quality loss. Files are larger but maintain perfect quality, essential for professional work.</li>
+                <li><strong>Editable Formats (DOCX, XLSX, PPTX):</strong> Designed for content creation and editing. These formats preserve editing capabilities and formatting options.</li>
+                <li><strong>Read-Only Formats (PDF):</strong> Optimized for viewing and printing across different platforms while preserving exact formatting.</li>
+                <li><strong>Universal Formats (TXT, CSV):</strong> Simple formats that can be opened by virtually any text editor or spreadsheet program.</li>
+                <li><strong>Open Standards (ODT, ODS, ODP):</strong> Free, open formats supported by multiple office suites including LibreOffice and OpenOffice.</li>
             </ul>
 
-            <h3>Image Format Comparison Table</h3>
+            <h3>Document Format Comparison Table</h3>
             <table class="comparison-table">
                 <thead>
                 <tr>
                     <th>Format</th>
                     <th>Best For</th>
-                    <th>Compression</th>
-                    <th>Transparency</th>
+                    <th>Editable</th>
+                    <th>Multi-platform</th>
                     <th>File Size</th>
-                    <th>Browser Support</th>
+                    <th>Security</th>
                 </tr>
                 </thead>
                 <tbody>
                 <tr>
-                    <td><strong>JPG</strong></td>
-                    <td>Photographs, Web Images</td>
-                    <td>Lossy</td>
-                    <td>No</td>
-                    <td>Small</td>
-                    <td>Universal</td>
-                </tr>
-                <tr>
-                    <td><strong>PNG</strong></td>
-                    <td>Logos, Graphics, Screenshots</td>
-                    <td>Lossless</td>
-                    <td>Yes (Alpha)</td>
-                    <td>Medium-Large</td>
-                    <td>Universal</td>
-                </tr>
-                <tr>
-                    <td><strong>WebP</strong></td>
-                    <td>Modern Websites, Mobile</td>
-                    <td>Both</td>
-                    <td>Yes</td>
-                    <td>Very Small</td>
-                    <td>Modern Browsers</td>
-                </tr>
-                <tr>
-                    <td><strong>BMP</strong></td>
-                    <td>Windows Applications</td>
-                    <td>None</td>
-                    <td>No</td>
-                    <td>Very Large</td>
-                    <td>Universal</td>
-                </tr>
-                <tr>
-                    <td><strong>TIFF</strong></td>
-                    <td>Printing, Professional Editing</td>
-                    <td>Lossless</td>
-                    <td>Yes</td>
-                    <td>Large</td>
+                    <td><strong>PDF</strong></td>
+                    <td>Official Documents, eBooks, Forms</td>
                     <td>Limited</td>
+                    <td>Excellent</td>
+                    <td>Small-Medium</td>
+                    <td>High (Password Protect)</td>
+                </tr>
+                <tr>
+                    <td><strong>DOCX</strong></td>
+                    <td>Writing, Editing, Reports</td>
+                    <td>Yes</td>
+                    <td>Excellent</td>
+                    <td>Small</td>
+                    <td>Medium</td>
+                </tr>
+                <tr>
+                    <td><strong>XLSX</strong></td>
+                    <td>Data Analysis, Budgets, Lists</td>
+                    <td>Yes</td>
+                    <td>Excellent</td>
+                    <td>Small-Medium</td>
+                    <td>Medium</td>
+                </tr>
+                <tr>
+                    <td><strong>PPTX</strong></td>
+                    <td>Presentations, Slideshows</td>
+                    <td>Yes</td>
+                    <td>Excellent</td>
+                    <td>Medium</td>
+                    <td>Medium</td>
+                </tr>
+                <tr>
+                    <td><strong>TXT</strong></td>
+                    <td>Notes, Code, Simple Text</td>
+                    <td>Yes</td>
+                    <td>Universal</td>
+                    <td>Very Small</td>
+                    <td>Low</td>
+                </tr>
+                <tr>
+                    <td><strong>RTF</strong></td>
+                    <td>Formatted Text Documents</td>
+                    <td>Yes</td>
+                    <td>Excellent</td>
+                    <td>Small</td>
+                    <td>Low</td>
+                </tr>
+                <tr>
+                    <td><strong>ODT</strong></td>
+                    <td>Open Source Documents</td>
+                    <td>Yes</td>
+                    <td>Good</td>
+                    <td>Small</td>
+                    <td>Medium</td>
                 </tr>
                 </tbody>
             </table>
 
             <h3>Common Use Cases & Recommendations</h3>
             <div class="use-cases-box">
-                <h4>For Website Owners & Developers:</h4>
-                <p>Use WebP format for modern browsers (Chrome, Edge, Firefox, Safari 14+) with JPG fallbacks for compatibility. WebP reduces page load times by 25-35% compared to JPG. For product images, use optimized JPG at 80-85% quality. For icons and logos, PNG-8 or PNG-24 with transparency.</p>
+                <h4>For Students & Academics:</h4>
+                <p>Convert lecture notes from PDF to DOCX for editing. Transform research papers between different formats for submission. Convert group project documents to ensure compatibility across different office suites.</p>
 
-                <h4>For Social Media & Content Creators:</h4>
-                <p>Instagram prefers JPG with 1080px width. Facebook accepts both JPG and PNG - use PNG for graphics with text, JPG for photos. Twitter works best with WebP for faster loading. LinkedIn prefers PNG for professional graphics. Always check platform-specific guidelines for optimal dimensions.</p>
+                <h4>For Business Professionals:</h4>
+                <p>Convert financial reports from XLSX to PDF for secure sharing. Transform business proposals between DOCX and PDF formats. Convert presentation materials between PPTX and PDF for different viewing needs.</p>
 
-                <h4>For Print & Professional Work:</h4>
-                <p>TIFF or high-resolution JPG with 300 DPI minimum is essential for professional printing. Use CMYK color profile for offset printing (though our converter outputs RGB suitable for most modern printers). For archival purposes, TIFF with LZW compression provides perfect quality preservation.</p>
+                <h4>For Web Developers & Designers:</h4>
+                <p>Convert documentation between HTML and PDF formats. Transform style guides and design specifications between different document formats. Convert CSV data files to XLSX for better visualization and analysis.</p>
 
-                <h4>For Mobile Applications:</h4>
-                <p>WebP is ideal for mobile apps due to its small file size and good compression. For iOS development, HEIC format is native but can be converted to JPG for cross-platform compatibility. PNG is best for app icons and interface elements requiring transparency.</p>
+                <h4>For Government & Legal Use:</h4>
+                <p>Convert legal documents to PDF for official submission. Transform government forms between editable and read-only formats. Convert archival documents to universal formats for long-term preservation.</p>
             </div>
 
             <h3>Frequently Asked Questions</h3>
             <div class="faq-section">
                 <div class="faq-item">
-                    <div class="faq-question">Q: Is this image converter completely free?</div>
+                    <div class="faq-question">Q: Is this document converter completely free?</div>
                     <div class="faq-answer">A: Yes, absolutely free! No hidden charges, no subscriptions, and no registration required. We believe in providing valuable tools without barriers.</div>
                 </div>
 
                 <div class="faq-item">
-                    <div class="faq-question">Q: Are my uploaded images safe and private?</div>
-                    <div class="faq-answer">A: Your privacy is our priority. All images are automatically deleted from our servers within 24 hours. We don't store, share, or analyze your files - they're processed solely for conversion.</div>
+                    <div class="faq-question">Q: Are my uploaded documents safe and private?</div>
+                    <div class="faq-answer">A: Your privacy is our priority. All documents are automatically deleted from our servers within 24 hours. We don't store, share, or analyze your files - they're processed solely for conversion.</div>
                 </div>
 
                 <div class="faq-item">
                     <div class="faq-question">Q: What is the maximum file size I can convert?</div>
-                    <div class="faq-answer">A: Currently, we support files up to 50MB for optimal performance. This covers most photographic and graphic needs. Larger files may take longer to process.</div>
+                    <div class="faq-answer">A: Currently, we support files up to 100MB for optimal performance. This covers most document needs. Larger files may take longer to process.</div>
                 </div>
 
                 <div class="faq-item">
-                    <div class="faq-question">Q: Which format should I use for website images?</div>
-                    <div class="faq-answer">A: For modern websites, WebP is ideal with JPG fallbacks. For maximum compatibility, use JPG for photos and PNG for graphics with transparency. Always optimize images before uploading to your site.</div>
+                    <div class="faq-question">Q: Will my formatting be preserved during conversion?</div>
+                    <div class="faq-answer">A: Our advanced conversion engine preserves fonts, layouts, tables, and formatting to the maximum extent possible. Complex documents with custom fonts or advanced formatting may require minor adjustments after conversion.</div>
                 </div>
 
                 <div class="faq-item">
-                    <div class="faq-question">Q: Can I convert multiple images at once?</div>
-                    <div class="faq-answer">A: Currently, our converter processes one image at a time to ensure quality and security. For batch conversion, you can convert images sequentially.</div>
+                    <div class="faq-question">Q: Can I convert multiple documents at once?</div>
+                    <div class="faq-answer">A: Currently, our converter processes one document at a time to ensure quality and security. For batch conversion, you can convert documents sequentially.</div>
                 </div>
 
                 <div class="faq-item">
-                    <div class="faq-question">Q: Do you support CMYK to RGB conversion?</div>
-                    <div class="faq-answer">A: Yes, our converter automatically handles color space conversion. Images are converted to sRGB (standard for web and displays) unless the source format supports color profiles.</div>
+                    <div class="faq-question">Q: Do you support password-protected documents?</div>
+                    <div class="faq-answer">A: For security reasons, we cannot process password-protected documents. Please remove password protection before uploading your documents for conversion.</div>
                 </div>
             </div>
         </section>
-
         {{{footer}}}
     </div>
 </div>
@@ -808,7 +845,7 @@
     });
 
     // File input styling
-    const fileInput = document.getElementById('image');
+    const fileInput = document.getElementById('document');
     if (fileInput) {
         fileInput.addEventListener('change', function(e) {
             if (this.files && this.files[0]) {

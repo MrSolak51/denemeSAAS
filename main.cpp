@@ -10,8 +10,8 @@
 #include <chrono>
 #include <random>
 
-// Header file where ImageConverter class is defined
 #include "ImageConverter.h"
+#include "DocumentConverter.h"
 
 namespace fs = std::filesystem;
 
@@ -165,11 +165,17 @@ std::string get_link_from_csv(std::string banner_key) {
 int main() {
     crow::SimpleApp app;
 
-    start_cleanup_thread("out_files");
+    start_cleanup_thread("out_files/images");
+    start_cleanup_thread("out_files/documents");
 
     // Create required directories at startup
     fs::create_directories("in_files");
+    fs::create_directories("in_files/images");
+    fs::create_directories("in_files/documents");
+
     fs::create_directories("out_files");
+    fs::create_directories("out_files/images");
+    fs::create_directories("out_files/documents");
     fs::create_directories("db");
 
     // Assets klasörü altındaki tüm dosyaları (reklamlar, logolar vb.) sunmak için:
@@ -191,7 +197,9 @@ int main() {
            ctx["name"] = "Metehan";
            ctx["surname"] = "TURGUT";
 
-           ctx["nav"] = get_html("templates/nav.html");
+           
+        ctx["nav"] = get_html("templates/nav.html");
+        ctx["footer"] = get_html("templates/footer.html");
            return crow::mustache::load("privacy_policy.html").render(ctx);
     });
     CROW_ROUTE(app, "/terms_of_service/")
@@ -199,7 +207,9 @@ int main() {
            crow::mustache::context ctx;
            ctx["name"] = "Metehan";
            ctx["surname"] = "TURGUT";
-           ctx["nav"] = get_html("templates/nav.html");
+           
+        ctx["nav"] = get_html("templates/nav.html");
+        ctx["footer"] = get_html("templates/footer.html");
            return crow::mustache::load("terms_of_service.html").render(ctx);
        });
     // 1. HOME PAGE
@@ -213,7 +223,9 @@ int main() {
         ctx["experiences"] = readCSV("db/experiences.csv", {"company", "position", "date", "details"});
         ctx["skills"] = readCSV("db/skills.csv", {"skill_name", "skill_level"});
 
+        
         ctx["nav"] = get_html("templates/nav.html");
+        ctx["footer"] = get_html("templates/footer.html");
         return crow::mustache::load("index.html").render(ctx);
     });
 
@@ -227,20 +239,24 @@ int main() {
         ctx["mail"] = "metehanturgut794@gmail.com";
         ctx["tel"] = "+90 532 485 3665";
 
+        
         ctx["nav"] = get_html("templates/nav.html");
+        ctx["footer"] = get_html("templates/footer.html");
         return crow::mustache::load("contact_me.html").render(ctx);
     });
 
 
 
     // 3. IMAGE CONVERTER INTERFACE (Session Managed)
-    CROW_ROUTE(app, "/image_converter/")
+    CROW_ROUTE(app, "/document_converter/")
     ([&](const crow::request& req) {
         crow::mustache::context ctx;
         ctx["name"] = "Metehan";
         ctx["surname"] = "TURGUT";
 
+        
         ctx["nav"] = get_html("templates/nav.html");
+        ctx["footer"] = get_html("templates/footer.html");
 
         // Session ID check
         std::string user_id = get_session_id(req);
@@ -253,8 +269,151 @@ int main() {
 
         // List only files belonging to this user
         std::vector<crow::json::wvalue> file_list;
-        if (fs::exists("out_files")) {
-            for (const auto& entry : fs::directory_iterator("out_files")) {
+        if (fs::exists("out_files/documents")) {
+            for (const auto& entry : fs::directory_iterator("out_files/documents")) {
+                if (entry.is_regular_file()) {
+                    std::string f_name = entry.path().filename().string();
+                    if (f_name.rfind(user_id, 0) == 0) {
+                        file_list.push_back(f_name);
+                    }
+                }
+            }
+        }
+        ctx["uploaded_documents"] = std::move(file_list);
+
+        auto rendered = crow::mustache::load("document_converter.html").render(ctx);
+        crow::response res(rendered.body_);
+
+        // Send Cookie to browser if new user
+        if (is_new_user) {
+            res.add_header("Set-Cookie", "user_session_id=" + user_id + "; Path=/; HttpOnly");
+        }
+        return res;
+    });
+
+    // 4. FILE UPLOAD AND CONVERT (POST)
+    CROW_ROUTE(app, "/document_converter/upload/").methods(crow::HTTPMethod::Post)
+    ([&](const crow::request& req) {
+        CROW_LOG_INFO << "Upload request started.";
+
+        std::string user_id = get_session_id(req);
+        if (user_id.empty()) return crow::response(400, "Session expired or invalid.");
+
+        crow::multipart::message msg(req);
+        if (msg.parts.empty()) return crow::response(400, "Form data is empty.");
+
+        std::string filename = "";
+        std::string file_body = "";
+        std::string target_ext = "";
+
+        try {
+            for (auto& part : msg.parts) {
+                auto it = part.headers.find("Content-Disposition");
+                if (it != part.headers.end()) {
+                    if (it->second.params.count("filename")) {
+                        filename = it->second.params["filename"];
+                        file_body = part.body;
+                    }
+                    else if (it->second.params.count("name")) {
+                        std::string field_name = it->second.params["name"];
+                        if (field_name == "extension" || field_name == "target_format") {
+                            target_ext = part.body;
+                        }
+                    }
+                }
+            }
+        } catch (const std::exception& e) {
+            CROW_LOG_ERROR << "Multipart parsing error: " << e.what();
+            return crow::response(500, "Failed to parse data.");
+        }
+
+        if (filename.empty()) return crow::response(400, "Filename not found.");
+
+        if (target_ext.empty()) target_ext = "pdf";
+        if (target_ext[0] != '.') target_ext = "." + target_ext;
+
+        std::string unique_name = user_id + "_" + filename;
+        std::string in_path = "in_files/documents/" + unique_name;
+
+        try {
+            std::ofstream out(in_path, std::ios::binary);
+            if (!out.is_open()) throw std::runtime_error("File could not be written (permission issue).");
+            out << file_body;
+            out.close();
+        } catch (const std::exception& e) {
+            CROW_LOG_ERROR << "File save error: " << e.what();
+            return crow::response(500, "Server failed to save the file.");
+        }
+
+        try {
+            CROW_LOG_INFO << "Conversion started: " << unique_name << " -> " << filename << target_ext;
+            DocumentConverter dc(unique_name, target_ext);
+            dc.convert();
+            CROW_LOG_INFO << "Conversion successful.";
+        } catch (const std::exception& e) {
+            CROW_LOG_ERROR << "CONVERTER ERROR: " << e.what();
+            return crow::response(500, std::string("Conversion error occurred: ") + e.what());
+        }
+
+        if (fs::exists(in_path)) fs::remove(in_path);
+
+        crow::response res;
+        res.code = 200;
+        res.add_header("Content-Type", "text/html");
+        res.write("<script>window.location.href='/document_converter/';</script>");
+        return res;
+    });
+
+    // Redirect if upload route is accessed via GET
+    CROW_ROUTE(app, "/document_converter/upload/")
+    ([]() {
+        crow::response res;
+        res.redirect("/document_converter/");
+        return res;
+    });
+
+    // 5. FILE DELETE (Secure)
+    CROW_ROUTE(app, "/document_converter/delete/<string>")
+    ([&](const crow::request& req, std::string filename) {
+        std::string user_id = get_session_id(req);
+
+        if (!user_id.empty() && filename.rfind(user_id, 0) == 0) {
+            std::string path = "out_files/documents/" + filename;
+            if (fs::exists(path)) fs::remove(path);
+        }
+
+        crow::response res;
+        res.redirect("/document_converter/");
+        return res;
+    });
+
+
+
+    // 3. IMAGE CONVERTER INTERFACE (Session Managed)
+    CROW_ROUTE(app, "/image_converter/")
+    ([&](const crow::request& req) {
+        crow::mustache::context ctx;
+        ctx["name"] = "Metehan";
+        ctx["surname"] = "TURGUT";
+
+        
+        ctx["nav"] = get_html("templates/nav.html");
+        ctx["footer"] = get_html("templates/footer.html");
+        
+
+        // Session ID check
+        std::string user_id = get_session_id(req);
+        bool is_new_user = false;
+
+        if (user_id.empty()) {
+            user_id = generate_user_id();
+            is_new_user = true;
+        }
+
+        // List only files belonging to this user
+        std::vector<crow::json::wvalue> file_list;
+        if (fs::exists("out_files/images")) {
+            for (const auto& entry : fs::directory_iterator("out_files/images")) {
                 if (entry.is_regular_file()) {
                     std::string f_name = entry.path().filename().string();
                     if (f_name.rfind(user_id, 0) == 0) {
@@ -317,7 +476,7 @@ int main() {
         if (target_ext[0] != '.') target_ext = "." + target_ext;
 
         std::string unique_name = user_id + "_" + filename;
-        std::string in_path = "in_files/" + unique_name;
+        std::string in_path = "in_files/images/" + unique_name;
 
         try {
             std::ofstream out(in_path, std::ios::binary);
@@ -365,7 +524,7 @@ int main() {
         std::string user_id = get_session_id(req);
 
         if (!user_id.empty() && filename.rfind(user_id, 0) == 0) {
-            std::string path = "out_files/" + filename;
+            std::string path = "out_files/images/" + filename;
             if (fs::exists(path)) fs::remove(path);
         }
 
@@ -374,10 +533,26 @@ int main() {
         return res;
     });
 
-    // 6. FILE DOWNLOAD
-    CROW_ROUTE(app, "/download/<string>")
+    // 6. IMG DOWNLOAD
+    CROW_ROUTE(app, "/download/image/<string>")
     ([](std::string filename) {
-        std::string path = "out_files/" + filename;
+        std::string path = "out_files/images/" + filename;
+        crow::response res;
+
+        if (!fs::exists(path)) {
+            res.code = 404;
+            res.write("File not found.");
+            return res;
+        }
+
+        res.set_static_file_info(path);
+        res.add_header("Content-Disposition", "attachment; filename=\"" + filename + "\"");
+        return res;
+    });
+    // 6. DOC DOWNLOAD
+    CROW_ROUTE(app, "/download/document/<string>")
+    ([](std::string filename) {
+        std::string path = "out_files/documents/" + filename;
         crow::response res;
 
         if (!fs::exists(path)) {

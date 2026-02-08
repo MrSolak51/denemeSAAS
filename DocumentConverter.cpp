@@ -4,28 +4,25 @@
 
 #include "DocumentConverter.h"
 
-void DocumentConverter::listFormats() const {
-    std::cout << "--- Desteklenen Hedef Formatlar ---" << std::endl;
-    for (auto const& [kategori, uzantilar] : formatMap) {
-        std::cout << kategori << ": ";
-        for (const auto& u : uzantilar) std::cout << u << " ";
-        std::cout << std::endl;
-    }
+
+DocumentConverter::DocumentConverter(std::string input, std::string target_format) {
+    this->input = "in_files/documents/" + input;
+    this->target_format = target_format;
 }
 
-bool DocumentConverter::convert(const std::string& inputPath, const std::string& targetFormat) {
-    if (!fs::exists(inputPath)) {
+int DocumentConverter::convert() {
+    if (!fs::exists(input)) {
         std::cerr << "Hata: Girdi dosyasi bulunamadi!" << std::endl;
         return false;
     }
 
     // Komutu inşa et (Tırnak işaretleri boşluklu yollar için kritiktir)
     // --outdir . komutu, çıktının mevcut klasöre düşmesini sağlar
-    std::string command = "soffice --headless --convert-to " + targetFormat +
-                          " \"" + inputPath + "\" --outdir .";
+    std::string command = "soffice --headless --convert-to " + target_format +
+                          " \"" + input + "\" --outdir out_files/documents/";
 
-    std::cout << "Islem baslatiliyor: " << fs::path(inputPath).filename()
-              << " -> " << targetFormat << std::endl;
+    std::cout << "Islem baslatiliyor: " << fs::path(input).filename()
+              << " -> " << target_format << std::endl;
 
     return (std::system(command.c_str()) == 0);
 }

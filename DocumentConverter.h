@@ -17,17 +17,14 @@ namespace fs = std::filesystem;
 
 class DocumentConverter {
 private:
-    // Desteklenen format kategorileri
-    const std::map<std::string, std::vector<std::string>> formatMap = {
-        {"Belge", {"pdf", "docx", "doc", "odt", "rtf", "txt", "html"}},
-        {"Sunum", {"pptx", "ppt", "odp", "pdf"}},
-        {"Tablo", {"xlsx", "xls", "ods", "csv", "pdf"}},
-        {"Görsel", {"png", "jpg", "jpeg", "svg", "eps"}}
-    };
+    std::string input;
+    std::string output;
+    std::string target_format;
 
 public:
-    void listFormats() const;
-    bool convert(const std::string& inputPath, const std::string& targetFormat);
+    DocumentConverter(std::string input, std::string target_format);
+
+    int convert();
 };
 
 
